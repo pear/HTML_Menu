@@ -527,30 +527,6 @@ class HTML_Menu
 
 
    /**
-    * Prints the HTML menu, the method is an alias to show()
-    *
-    * @param  string  Menu type: tree, urhere, rows, prevnext, sitemap
-    * @access public
-    */
-    function display($menuType = '')
-    {
-        print $this->get($menuType);
-    }
-
-
-   /**
-    * Returns the HTML menu, the method is an alias to get()
-    *  
-    * @param  string  Menu type: tree, urhere, rows, prevnext, sitemap
-    * @access public
-    */
-    function toHtml($menuType = '')
-    {
-        return $this->get($menuType);
-    }
-
-
-   /**
     * Sets the prefix for the URLs in the menu
     * 
     * @param  string
