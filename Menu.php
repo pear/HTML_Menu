@@ -210,15 +210,7 @@ class HTML_Menu
         // storing to a class variable saves some recursion overhead
         $this->path = $this->getPath();
 
-        if ('sitemap' == $this->menu_type) {
-
-            $this->setMenuType('tree');
-            $this->buildSitemap($this->menu);
-            $this->setMenuType('sitemap');
-
-        } else {
-            $this->buildMenu($this->menu);
-        }
+        $this->buildMenu($this->menu);
 
         if ('rows' != $this->menu_type) {
             $this->html .= $this->getEnd();
@@ -296,35 +288,15 @@ class HTML_Menu
 
         // the recursion goes slightly different for every menu type
         switch ($this->menu_type) {
-            case 'tree':
-                // loop through the (sub)menu
-                foreach ($menu as $node_id => $node) {
-                    if ($this->current_url == $node['url']) {
-                        // menu item that fits to this url - 'active' menu item
-                        $type = HTML_MENU_ENTRY_ACTIVE;
-                    } elseif (isset($this->path[$level]) && $this->path[$level] == $node_id) {
-                        // processed menu item is part of the path to the active menu item
-                        $type = HTML_MENU_ENTRY_ACTIVEPATH;
-                    } else {
-                        // not selected, not a part of the path to the active menu item
-                        $type = HTML_MENU_ENTRY_INACTIVE;
-                    }
-
-                    $this->html .= $this->getEntry($node, $level, $type);
-
-                    // follow the subtree if the active menu item is in it
-                    if ((HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
-                        $this->buildMenu($node['sub'], $level + 1);
-                    }
-                }
-                break;
-
             case 'rows':
                 // every (sub)menu has it's own table
                 $this->html .= $this->getStart();
 
                 $submenu = false;
 
+            case 'tree':
+            case 'sitemap':
+            case 'urhere':
                 // loop through the (sub)menu
                 foreach ($menu as $node_id => $node) {
                     if ($this->current_url == $node['url']) {
@@ -338,47 +310,30 @@ class HTML_Menu
                         $type = HTML_MENU_ENTRY_INACTIVE;
                     }
 
-                    $this->html .= $this->getEntry($node, $level, $type);
-
-                    // remember the subtree
-                    if ((HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
-                        $submenu = $node['sub'];
-                    }
-                }
-
-                // close the table for this level
-                $this->html .= $this->getEnd();
-
-                // go deeper if neccessary
-                if ($submenu) {
-                    $this->buildMenu($submenu, $level + 1);
-                }
-
-                break;
-
-            case 'urhere':
-                // loop through the (sub)menu
-                foreach ($menu as $node_id => $node) {
-                    if ($this->current_url == $node['url']) {
-                        // menu item that fits to this url - 'active' menu item
-                        $type = HTML_MENU_ENTRY_ACTIVE;
-                    } else if (isset($this->path[$level]) && $this->path[$level] == $node_id) {
-                        // processed menu item is part of the path to the active menu item
-                        $type = HTML_MENU_ENTRY_ACTIVEPATH;
-                    } else {
-                        // not selected, not a part of the path to the active menu item
-                        $type = HTML_MENU_ENTRY_INACTIVE;
+                    if ('urhere' != $this->menu_type || HTML_MENU_ENTRY_INACTIVE != $type) {
+                        $this->html .= $this->getEntry($node, $level, $type);
                     }
 
                     // follow the subtree if the active menu item is in it
-                    if (HTML_MENU_ENTRY_INACTIVE != $type) {
-                        $this->html .= $this->getEntry($node, $level, $type);
-                        if (isset($node['sub'])) {
+                    if (('sitemap' == $this->menu_type || HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
+                        if ('rows' == $this->menu_type) {
+                            $submenu = $node['sub'];
+                        } else {
                             $this->buildMenu($node['sub'], $level + 1);
                         }
                     }
                 }
+                if ('rows' == $this->menu_type) {
+                    // close the table for this level
+                    $this->html .= $this->getEnd();
+    
+                    // go deeper if neccessary
+                    if ($submenu) {
+                        $this->buildMenu($submenu, $level + 1);
+                    }
+                }
                 break;
+
 
           case 'prevnext':
                 // loop through the (sub)menu
@@ -437,41 +392,6 @@ class HTML_Menu
 
 
    /**
-    * Build the menu recursively.
-    * 
-    * XXX: Looks like this behaves *exactly* like 'tree', except 'tree' does 
-    * not show inactive elements. Should probably process this in buildMenu()
-    *
-    * @param    array   first call: $this->menu, recursion: submenu
-    * @param    int     level of recursion, current depth in the tree structure
-    */
-    function buildSitemap($menu, $level = 0) 
-    {
-        // loop through the (sub)menu
-        foreach ($menu as $node_id => $node) {
-            if ($this->current_url == $node['url']) {
-                // menu item that fits to this url - 'active' menu item
-                $type = HTML_MENU_ENTRY_ACTIVE;
-            } else if (isset($this->path[$level]) && $this->path[$level] == $node_id) {
-                // processed menu item is part of the path to the active menu item
-                $type = HTML_MENU_ENTRY_ACTIVEPATH;
-            } else {
-                // not selected, not a part of the path to the active menu item
-                $type = HTML_MENU_ENTRY_INACTIVE;
-            }
-
-            $this->html .= $this->getEntry($node, $level, $type);
-
-            // follow the subtree
-            // XXX: The only difference from 'tree' is here.
-            if (isset($node['sub'])) {
-                $this->buildSitemap($node['sub'], $level + 1);
-            }
-        }
-    }
-
-
-   /**
     * Returns the HTML of one menu item.
     *
     * @param    array   menu item data (node data)
@@ -488,7 +408,7 @@ class HTML_Menu
         $html   = '';
         $indent = '';
 
-        if ('tree' == $this->menu_type) {
+        if ('tree' == $this->menu_type || 'sitemap' == $this->menu_type) {
             // tree menu
             $html   .= '<tr>';
             $indent  = str_repeat('&nbsp;&nbsp;&nbsp;', $level);
@@ -533,7 +453,7 @@ class HTML_Menu
                 break;
         }
 
-        if ('tree' == $this->menu_type) {
+        if ('tree' == $this->menu_type || 'sitemap' == $this->menu_type) {
             $html .= '</tr>';
         }
 
