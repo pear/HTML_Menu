@@ -71,33 +71,33 @@
     <!-- BEGIN tree_entry_loop -->
     <tr>
         <!-- BEGIN tree_1_inactive -->
-        <td><a href="{tree_url}">{tree_title}</a></td>
+        <td><a href="{tree_url}" title="{tree_desc}">{tree_title}</a></td>
         <!-- END tree_1_inactive -->
         <!-- BEGIN tree_1_active -->
         <td><strong>{tree_title}</strong></td>
         <!-- END tree_1_active -->
         <!-- BEGIN tree_1_activepath -->
-        <td><a href="{tree_url}"><strong>{tree_title}</strong></a></td>
+        <td><a href="{tree_url}" title="{tree_desc}"><strong>{tree_title}</strong></a></td>
         <!-- END tree_1_activepath -->
 
         <!-- BEGIN tree_2_inactive -->
-        <td>&nbsp;&nbsp;<a href="{tree_url}" class="small">{tree_title}</a></td>
+        <td>&nbsp;&nbsp;<a href="{tree_url}" class="small" title="{tree_desc}">{tree_title}</a></td>
         <!-- END tree_2_inactive -->
         <!-- BEGIN tree_2_active -->
         <td>&nbsp;&nbsp;<strong class="small">{tree_title}</strong></td>
         <!-- END tree_2_active -->
         <!-- BEGIN tree_2_activepath -->
-        <td>&nbsp;&nbsp;<a href="{tree_url}" class="small"><strong>{tree_title}</strong></a></td>
+        <td>&nbsp;&nbsp;<a href="{tree_url}" class="small" title="{tree_desc}"><strong>{tree_title}</strong></a></td>
         <!-- END tree_2_activepath -->
 
         <!-- BEGIN tree_inactive -->
-        <td><!-- BEGIN tree_inactive_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_inactive_indent --><a href="{tree_url}" class="smaller">&bull; {tree_title}</a></td>
+        <td><!-- BEGIN tree_inactive_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_inactive_indent --><a href="{tree_url}" class="smaller" title="{tree_desc}">&bull; {tree_title}</a></td>
         <!-- END tree_inactive -->
         <!-- BEGIN tree_active -->
         <td><!-- BEGIN tree_active_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_active_indent --><strong class="smaller">&bull; {tree_title}</strong></td>
         <!-- END tree_active -->
         <!-- BEGIN tree_activepath -->
-        <td><!-- BEGIN tree_activepath_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_activepath_indent --><a href="{tree_url}" class="smaller"><strong>&bull; {tree_title}</strong></a></td>
+        <td><!-- BEGIN tree_activepath_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_activepath_indent --><a href="{tree_url}" class="smaller" title="{tree_desc}"><strong>&bull; {tree_title}</strong></a></td>
         <!-- END tree_activepath -->
     </tr>
     <!-- END tree_entry_loop -->

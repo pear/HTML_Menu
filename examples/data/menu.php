@@ -12,16 +12,19 @@ $data = array(
     1 => array(
         'title' => 'Menu item 1', 
         'url' => '/item1.php',
+        'desc' => 'a special element',
         'sub' => array(
-            11 => array('title' => 'Menu item 1.1', 'url' => '/item1.1.php'),
+            11 => array('title' => 'Menu item 1.1', 'url' => '/item1.1.php', 'desc' => 'nothing special here'),
             12 => array(
                 'title' => 'Menu item 1.2', 
                 'url' => '/item1.2.php',
+                'desc' => 'a very special element',
                 'sub' => array(
                     121 => array('title' => 'Menu item 1.2.1', 'url' => '/item1.2.1.php'),
                     122 => array(
                         'title' => 'Menu item 1.2.2', 
                         'url' => '/item1.2.2.php',
+                        'desc' => 'a really very special element',
                         'sub' => array(
                             1221 => array('title' => 'Menu item 1.2.2.1', 'url' => '/item1.2.2.1.php'),
                             1222 => array('title' => 'Menu item 1.2.2.2', 'url' => '/item1.2.2.2.php')
