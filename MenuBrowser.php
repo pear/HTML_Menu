@@ -54,7 +54,7 @@ class HTML_MenuBrowser
     * Filesuffix of your XML files.
     *
     * @var  string
-    * @see  menubrowser()
+    * @see  HTML_MenuBrowser()
     */
     var $file_suffix = 'xml';
 
@@ -62,7 +62,7 @@ class HTML_MenuBrowser
     * Number of characters of the file suffix.
     *
     * @var  int
-    * @see  menubrowser()
+    * @see  HTML_MenuBrowser()
     */
     var $file_suffix_length = 3;
 
@@ -70,7 +70,7 @@ class HTML_MenuBrowser
     * Filename (without suffix) of your index / start pages.
     *
     * @var  string
-    * @see  menubrowser()
+    * @see  HTML_MenuBrowser()
     */
     var $index = 'index';
 
@@ -228,7 +228,7 @@ class HTML_MenuBrowser
    /**
     * Adds further informations to the menu hash gathered from the files in it
     *
-    * @var      array   Menu hash to examine
+    * @param    array   Menu hash to examine
     * @return   array   Modified menu hash with the new informations
     */
     function addFileInfo($menu) 

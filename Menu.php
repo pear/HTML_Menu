@@ -101,10 +101,10 @@ class HTML_Menu
    /**
     * Initializes the menu, sets the type and menu structure.
     *
-    * @param    array
-    * @param    string
-    * @param    string
-    * @see      setMenuType(), setMenu()
+    * @param    array   menu structure
+    * @param    string  menu type
+    * @param    string  env. variable used to determine current URL
+    * @see      setMenuType(), setMenu(), setURLEnvVar()
     */
     function HTML_Menu($menu = null, $type = 'tree', $urlEnvVar = 'PHP_SELF') 
     {
@@ -150,7 +150,6 @@ class HTML_Menu
     *
     * @param    array
     * @access   public
-    * @see      append(), update()
     */
     function setMenu($menu) 
     {
@@ -196,6 +195,7 @@ class HTML_Menu
     * @param    string  Menu type: tree, urhere, rows, prevnext, sitemap
     * @return   string  HTML of the menu
     * @access   public
+    * @see render()
     */
     function get($menuType = '') 
     {
@@ -211,7 +211,7 @@ class HTML_Menu
     *
     * @access   public
     * @param    string  Menu type: tree, urhere, rows, prevnext, sitemap
-    * @see      get()
+    * @see      get(), render()
     */
     function show($menuType = '') 
     {

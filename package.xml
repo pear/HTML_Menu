@@ -28,10 +28,14 @@
     <state>stable</state>
     <date>2003-09-??</date>
     <notes>
-HTML_Menu now outputs the menu through renderers
+HTML_Menu class does not contain output logic itself anymore. Output is now done via
+external Renderer classes. This will cause BC break if you extended HTML_Menu to customize
+its output.
 
+Additions and changes:
 - Added Direct renderer: based on old code but it is possible to customize its output
 - Added Sigma renderer that uses an instance of HTML_Template_Sigma for output
+- Added Array renderer that creates an array of menu's visible entries
 - Added usage examples
 - Changed 'prevnext' menu generation, previous element is now the one closest to the current.
     </notes>
@@ -41,6 +45,7 @@ HTML_Menu now outputs the menu through renderers
         <file role="php" name="MenuBrowser.php"/>
         <dir name="Menu">
           <file role="php" name="Renderer.php"/>
+          <file role="php" name="ArrayRenderer.php"/>
           <file role="php" name="DirectRenderer.php"/>
           <file role="php" name="SigmaRenderer.php"/>
         </dir>
