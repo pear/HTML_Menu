@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- $Id$ -->
+<html>
+<head>
+<title>HTML_Menu_SigmaRenderer demo</title>
+<style type="text/css">
+.treetable {
+   font-family: sans-serif;
+   border : thin dashed #D0D0D0;
+   background-color : #EEE;
+}
+.rowstable {
+   font-family: sans-serif;
+   background-color : #F0F0F0;
+}
+.rows1 {
+   background-color : #AAA;
+}
+.rows2 {
+   background-color : #CCC;
+}
+.small {
+   font-size: 85%;
+}
+.smaller {
+   font-size: 70%;
+}
+</style>
+</head>
+
+<body>
+<!-- BEGIN type_loop -->
+<h1>Trying menu type &quot;{type}&quot; </h1>
+<!-- BEGIN mu_menu_loop -->
+<table cellpadding="2" cellspacing="0" border="1">
+    <!-- BEGIN mu_row_loop -->
+    <tr>
+        <!-- BEGIN mu_entry_loop -->
+        <!-- BEGIN mu_inactive -->
+        <td><!-- BEGIN mu_inactive_indent -->&nbsp;&nbsp;<!-- END mu_inactive_indent --><a href="{mu_url}">{mu_title}</a></td>
+        <!-- END mu_inactive -->
+        <!-- BEGIN mu_active -->
+        <td><!-- BEGIN mu_active_indent -->&nbsp;&nbsp;<!-- END mu_active_indent --><strong>{mu_title}</strong></td>
+        <!-- END mu_active -->
+        <!-- BEGIN mu_activepath -->
+        <td><!-- BEGIN mu_activepath_indent -->&nbsp;&nbsp;<!-- END mu_activepath_indent --><a href="{mu_url}"><strong>{mu_title}</strong></a></td>
+        <!-- END mu_activepath -->
+        <!-- BEGIN mu_previous -->
+        <td><a href="{mu_url}">&lt;&lt;&lt; {mu_title}</a></td>
+        <!-- END mu_previous -->
+        <!-- BEGIN mu_next -->
+        <td><a href="{mu_url}">{mu_title} &gt;&gt;&gt;</a></td>
+        <!-- END mu_next -->
+        <!-- BEGIN mu_upper -->
+        <td><a href="{mu_url}">^ {mu_title} ^</a></td>
+        <!-- END mu_upper -->
+        <!-- BEGIN mu_breadcrumb -->
+        <td><a href="{mu_url}">{mu_title}</a> &gt;&gt;&gt;</td>
+        <!-- END mu_breadcrumb -->
+        <!-- END mu_entry_loop -->
+    </tr>
+    <!-- END mu_row_loop -->
+</table>
+<!-- END mu_menu_loop -->
+<!-- END type_loop -->
+
+<h1>Customizing the &quot;tree&quot; output</h1>
+
+<table cellpadding="2" cellspacing="0" border="0" class="treetable">
+    <!-- BEGIN tree_entry_loop -->
+    <tr>
+        <!-- BEGIN tree_1_inactive -->
+        <td><a href="{tree_url}">{tree_title}</a></td>
+        <!-- END tree_1_inactive -->
+        <!-- BEGIN tree_1_active -->
+        <td><strong>{tree_title}</strong></td>
+        <!-- END tree_1_active -->
+        <!-- BEGIN tree_1_activepath -->
+        <td><a href="{tree_url}"><strong>{tree_title}</strong></a></td>
+        <!-- END tree_1_activepath -->
+
+        <!-- BEGIN tree_2_inactive -->
+        <td>&nbsp;&nbsp;<a href="{tree_url}" class="small">{tree_title}</a></td>
+        <!-- END tree_2_inactive -->
+        <!-- BEGIN tree_2_active -->
+        <td>&nbsp;&nbsp;<strong class="small">{tree_title}</strong></td>
+        <!-- END tree_2_active -->
+        <!-- BEGIN tree_2_activepath -->
+        <td>&nbsp;&nbsp;<a href="{tree_url}" class="small"><strong>{tree_title}</strong></a></td>
+        <!-- END tree_2_activepath -->
+
+        <!-- BEGIN tree_inactive -->
+        <td><!-- BEGIN tree_inactive_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_inactive_indent --><a href="{tree_url}" class="smaller">&bull; {tree_title}</a></td>
+        <!-- END tree_inactive -->
+        <!-- BEGIN tree_active -->
+        <td><!-- BEGIN tree_active_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_active_indent --><strong class="smaller">&bull; {tree_title}</strong></td>
+        <!-- END tree_active -->
+        <!-- BEGIN tree_activepath -->
+        <td><!-- BEGIN tree_activepath_indent -->&nbsp;&nbsp;&nbsp;&nbsp;<!-- END tree_activepath_indent --><a href="{tree_url}" class="smaller"><strong>&bull; {tree_title}</strong></a></td>
+        <!-- END tree_activepath -->
+    </tr>
+    <!-- END tree_entry_loop -->
+</table>
+
+<h1>Customizing the "rows" output</h1>
+<!-- BEGIN rows_menu_loop -->
+<table cellpadding="2" cellspacing="0" border="0" class="rowstable">
+    <!-- BEGIN rows_1_row_loop -->
+    <tr class="rows1">
+		<td>&nbsp;|&nbsp;</td>
+        <!-- BEGIN rows_1_entry_loop -->
+        <!-- BEGIN rows_1_inactive -->
+        <td><a href="{rows_url}">{rows_title}</a></td>
+        <!-- END rows_1_inactive -->
+        <!-- BEGIN rows_1_active -->
+        <td><strong>{rows_title}</strong></td>
+        <!-- END rows_1_active -->
+        <!-- BEGIN rows_1_activepath -->
+        <td><a href="{rows_url}"><strong>{rows_title}</strong></a></td>
+        <!-- END rows_1_activepath -->
+		<td>&nbsp;|&nbsp;</td>
+        <!-- END rows_1_entry_loop -->
+    </tr>
+    <!-- END rows_1_row_loop -->
+
+    <!-- BEGIN rows_2_row_loop -->
+    <tr class="rows2">
+		<td>&nbsp;|&nbsp;</td>
+        <!-- BEGIN rows_2_entry_loop -->
+        <!-- BEGIN rows_2_inactive -->
+        <td><a href="{rows_url}" class="small">{rows_title}</a></td>
+        <!-- END rows_2_inactive -->
+        <!-- BEGIN rows_2_active -->
+        <td><strong class="small">{rows_title}</strong></td>
+        <!-- END rows_2_active -->
+        <!-- BEGIN rows_2_activepath -->
+        <td><a href="{rows_url}" class="small"><strong>{rows_title}</strong></a></td>
+        <!-- END rows_2_activepath -->
+		<td>&nbsp;|&nbsp;</td>
+        <!-- END rows_2_entry_loop -->
+    </tr>
+    <!-- END rows_2_row_loop -->
+
+    <!-- BEGIN rows_row_loop -->
+    <tr>
+		<td>&nbsp;|&nbsp;</td>
+        <!-- BEGIN rows_entry_loop -->
+        <!-- BEGIN rows_inactive -->
+        <td><a href="{rows_url}" class="smaller">{rows_title}</a></td>
+        <!-- END rows_inactive -->
+        <!-- BEGIN rows_active -->
+        <td><strong class="smaller">{rows_title}</strong></td>
+        <!-- END rows_active -->
+        <!-- BEGIN rows_activepath -->
+        <td><a href="{rows_url}" class="smaller"><strong>{rows_title}</strong></a></td>
+        <!-- END rows_activepath -->
+		<td>&nbsp;|&nbsp;</td>
+        <!-- END rows_entry_loop -->
+    </tr>
+    <!-- END rows_row_loop -->
+</table>
+<!-- END rows_menu_loop -->
+</body>
+</html>
+
