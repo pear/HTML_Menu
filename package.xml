@@ -24,11 +24,17 @@
   </maintainers>
   <license>PHP License</license>
   <release>
-    <version>2.0pl1</version>
+    <version>2.1</version>
     <state>stable</state>
-    <date>2003-09-16</date>
+    <date>2004-01-??</date>
     <notes>
-Fix packaging: HTML_Template_Sigma should be optional dependency (thanks to Stephan Schmidt)
+* Implemented #504, (Possibilty to set prefix for URLs, method setUrlPrefix())
+* Added methods toHtml() and display() as aliases for get() and show() (Thanks
+  to Aidan Lister for the suggestion)
+* Added two new renderers: DirectTree and SigmaTree, that allow to render
+  menus of type 'tree' and 'sitemap' where level is shown by tags nesting
+  rather than indentation (Thanks to Uwe Mindrup for the idea and the
+  initial implementation of DirectTree renderer).
     </notes>
     <filelist>
       <dir name="/" baseinstalldir="HTML">
@@ -38,13 +44,21 @@ Fix packaging: HTML_Template_Sigma should be optional dependency (thanks to Step
           <file role="php" name="Renderer.php"/>
           <file role="php" name="ArrayRenderer.php"/>
           <file role="php" name="DirectRenderer.php"/>
+          <file role="php" name="DirectTreeRenderer.php"/>
           <file role="php" name="SigmaRenderer.php"/>
+          <file role="php" name="SigmaTreeRenderer.php"/>
         </dir>
         <dir name="examples">
+          <file role="doc" name="directtree.php"/>
           <file role="doc" name="types.php"/>
           <file role="doc" name="sigma.php"/>
+          <file role="doc" name="sigmatree.php"/>
+          <dir name="data">
+            <file role="doc" name="menu.php"/>
+          </dir>
           <dir name="templates">
             <file role="doc" name="sigma.html"/>
+            <file role="doc" name="sigmatree.html"/>
           </dir>
         </dir>
       </dir>
@@ -54,6 +68,14 @@ Fix packaging: HTML_Template_Sigma should be optional dependency (thanks to Step
     </deps>
   </release>
   <changelog>
+    <release>
+      <version>2.0pl1</version>
+      <state>stable</state>
+      <date>2003-09-16</date>
+      <notes>
+Fix packaging: HTML_Template_Sigma should be optional dependency (thanks to Stephan Schmidt)
+      </notes>
+    </release>
     <release>
       <version>2.0</version>
       <state>stable</state>
