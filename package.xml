@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "../package.dtd">
+<package version="1.0">
+  <name>HTML_Menu</name>
+  <summary>Generates HTML menus from multidimensional hashes.</summary>
+  <description>
+    With the HTML_Menu class one can easily create and maintain a 
+    navigation structure for websites, with simply configuring through 
+    a multidimensional hash structure. Different modes for the HTML 
+    output are supported.
+  </description>
+  <maintainers>
+    <maintainer>
+      <user>uw</user>
+      <role>lead</role>
+      <name>Ulf Wendel</name>
+      <email>ulf.wendel@phpdoc.de</email>
+    </maintainer>
+  </maintainers>
+  <license>PHP License</license>
+  <release>
+    <version>0.1</version>
+    <state>stable</state>
+    <date>2002-04-28</date>
+    <notes>
+      Initial independent PEAR release.
+    </notes>
+    <filelist>
+      <dir name="/" baseinstalldir="HTML">
+        <file role="php" name="Menu.php"/>
+        <file role="php" name="MenuBrowser.php"/>
+      </dir>
+    </filelist>
+  </release>
+</package>
