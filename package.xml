@@ -26,15 +26,16 @@
   <release>
     <version>2.1</version>
     <state>stable</state>
-    <date>2004-01-??</date>
+    <date>2004-01-18</date>
     <notes>
 * Implemented #504, (Possibilty to set prefix for URLs, method setUrlPrefix())
-* Added methods toHtml() and display() as aliases for get() and show() (Thanks
-  to Aidan Lister for the suggestion)
 * Added two new renderers: DirectTree and SigmaTree, that allow to render
   menus of type 'tree' and 'sitemap' where level is shown by tags nesting
   rather than indentation (Thanks to Uwe Mindrup for the idea and the
   initial implementation of DirectTree renderer).
+* If entries in the initial menu structure contain keys other than 'sub',
+  'url' and 'title' then renderers will try to assign them to the placeholders
+  with the same names in the template (Thanks to Didier Galland for the idea)
     </notes>
     <filelist>
       <dir name="/" baseinstalldir="HTML">
