@@ -93,7 +93,7 @@ class HTML_Menu_SigmaRenderer extends HTML_Menu_Renderer
         }
     }
 
-    function renderEntry(&$node, $level, $type)
+    function renderEntry($node, $level, $type)
     {
         if (in_array($this->_menuType, array('tree', 'sitemap', 'rows'))
             && $this->_tpl->blockExists($this->_prefix . ($level + 1) . '_' . $this->_typeNames[$type])) {
@@ -110,10 +110,11 @@ class HTML_Menu_SigmaRenderer extends HTML_Menu_Renderer
                 $this->_tpl->parse($blockName . '_indent');
             }
         }
-        if ($this->_tpl->placeholderExists($this->_prefix . 'url', $blockName)) {
-            $this->_tpl->setVariable($this->_prefix . 'url', $node['url']);
+        foreach ($node as $k => $v) {
+            if ('sub' != $k && $this->_tpl->placeholderExists($this->_prefix . $k, $blockName)) {
+                $this->_tpl->setVariable($this->_prefix . $k, $v);
+            }
         }
-        $this->_tpl->setVariable($this->_prefix . 'title', $node['title']);
         $this->_tpl->parse($blockName);
         if ('rows' == $this->_menuType 
             && $this->_tpl->blockExists($this->_prefix . ($level + 1) . '_entry_loop')) {

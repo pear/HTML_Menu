@@ -144,10 +144,11 @@ class HTML_Menu_SigmaTreeRenderer extends HTML_Menu_Renderer
             $blockName = $this->_prefix . $this->_typeNames[$type];
         }
 
-        if ($this->_tpl->placeholderExists($this->_prefix . 'url', $blockName)) {
-            $this->_tpl->setVariable($this->_prefix . 'url', $node['url']);
+        foreach ($node as $k => $v) {
+            if ('sub' != $k && $this->_tpl->placeholderExists($this->_prefix . $k, $blockName)) {
+                $this->_tpl->setVariable($this->_prefix . $k, $v);
+            }
         }
-        $this->_tpl->setVariable($this->_prefix . 'title', $node['title']);
         $this->_tpl->parse($blockName);
         $this->_tpl->parse($this->_prefix . 'tree_loop');
 

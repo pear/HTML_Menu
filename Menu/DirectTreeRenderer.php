@@ -110,11 +110,14 @@ class HTML_Menu_DirectTreeRenderer extends HTML_Menu_Renderer
             isset($this->_levelHtml[$level]) or $this->_levelHtml[$level] = '';
             $this->_levelHtml[$level] .= $this->_itemTemplate[0] . $this->_itemHtml[$level] . $this->_itemTemplate[1];
         }
-        $this->_itemHtml[$level] = str_replace(
-                                    array('{url}', '{title}'),
-                                    array($node['url'], $node['title']),
-                                    $this->_entryTemplates[$type]
-                                   );
+        $keys = $values = array();
+        foreach ($node as $k => $v) {
+            if ('sub' != $k) {
+                $keys[]   = '{' . $k . '}';
+                $values[] = $v;
+            }
+        }
+        $this->_itemHtml[$level] = str_replace($keys, $values, $this->_entryTemplates[$type]);
     }
 
 

@@ -45,6 +45,8 @@ require_once 'HTML/Menu/Renderer.php';
  *    'title'  => title element of menu entry
  *    'level'  => entry's depth in the tree structure
  *    'type'   => type of entry, one of HTML_MENU_ENTRY_* constants
+ *    // if the nodes in the original menu array contained keys other
+ *    // than 'url', 'title' and 'sub', they will be copied here, too
  * )
  * 
  * @version  $Revision$
@@ -80,12 +82,10 @@ class HTML_Menu_ArrayRenderer extends HTML_Menu_Renderer
 
     function renderEntry($node, $level, $type)
     {
-        $this->_menuAry[] = array(
-            'url'   => $node['url'],
-            'title' => $node['title'],
-            'level' => $level,
-            'type'  => $type
-        );
+        unset($node['sub']);
+        $node['level'] = $level;
+        $node['type']  = $type;
+        $this->_menuAry[] = $node;
     }
 
 

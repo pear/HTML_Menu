@@ -97,17 +97,19 @@ class HTML_Menu_DirectRenderer extends HTML_Menu_Renderer
 
     function renderEntry($node, $level, $type)
     {
-        $values = array($node['url'], $node['title']);
+        $keys = array('{indent}');
         if ('tree' == $this->_menuType || 'sitemap' == $this->_menuType) {
-            $values[] = str_repeat('&nbsp;&nbsp;&nbsp;', $level);
+            $values = array(str_repeat('&nbsp;&nbsp;&nbsp;', $level));
         } else {
-            $values[] = '';
+            $values = array('');
         }
-        $this->_rowHtml .= str_replace(
-                            array('{url}', '{title}', '{indent}'), 
-                            $values, 
-                            $this->_entryTemplates[$type]
-                           );
+        foreach ($node as $k => $v) {
+            if ('sub' != $k) {
+                $keys[]   = '{' . $k . '}';
+                $values[] = $v;
+            }
+        }
+        $this->_rowHtml .= str_replace($keys, $values, $this->_entryTemplates[$type]);
     }
 
 
