@@ -459,7 +459,7 @@ class HTML_Menu
             $this->_currentUrl = substr($this->_currentUrl, 0, -1);
         }
 
-        return $this->_urlMap[$this->_currentUrl];
+        return isset($this->_urlMap[$this->_currentUrl])? $this->_urlMap[$this->_currentUrl]: array();
     }
 
 
