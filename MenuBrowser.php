@@ -45,10 +45,12 @@
 * (title!). Subclass exploreFile() depending on your file format.
 *
 * @author   Ulf Wendel <ulf.wendel@phpdoc.de>
-* @version  $Id$
+* @version  $Revision$
+* @package  HTML_Menu
 */
-class HTML_MenuBrowser {
-    /**
+class HTML_MenuBrowser 
+{
+   /**
     * Filesuffix of your XML files.
     *
     * @var  string
@@ -56,7 +58,7 @@ class HTML_MenuBrowser {
     */
     var $file_suffix = 'xml';
 
-    /**
+   /**
     * Number of characters of the file suffix.
     *
     * @var  int
@@ -64,7 +66,7 @@ class HTML_MenuBrowser {
     */
     var $file_suffix_length = 3;
 
-    /**
+   /**
     * Filename (without suffix) of your index / start pages.
     *
     * @var  string
@@ -72,7 +74,7 @@ class HTML_MenuBrowser {
     */
     var $index = 'index';
 
-    /**
+   /**
     * Full filename of your index / start pages.
     *
     * @var  string
@@ -80,7 +82,7 @@ class HTML_MenuBrowser {
     */
     var $index_file = '';
 
-    /**
+   /**
     * Directory to scan.
     *
     * @var  string
@@ -88,7 +90,7 @@ class HTML_MenuBrowser {
     */
     var $dir = '';
 
-    /**
+   /**
     * Prefix for every menu hash entry.
     *
     * Set the ID prefix if you want to merge the browser menu
@@ -107,56 +109,70 @@ class HTML_MenuBrowser {
     */
     var $menu = array();
 
-    /**
+   /**
     * Creates the object and optionally sets the directory to scan.
     *
-    * @param    string
+    * @param    string  Directory to scan
+    * @param    string  Filename of index pages
+    * @param    string  Suffix for files containing the additional data
     * @see      $dir
     */
-    function HTML_MenuBrowser($dir = '', $index = '', $file_suffix = '') {
-        if ($dir)
+    function HTML_MenuBrowser($dir = '', $index = '', $file_suffix = '')
+    {
+        if ($dir) {
             $this->dir = $dir;
-        if ($index)
+        }
+        if ($index) {
             $this->index = $index;
-        if ($file_suffix)
+        }
+        if ($file_suffix) {
             $this->file_suffix = $file_suffix;
+        }
 
         $this->index_file = $this->index . '.' . $this->file_suffix;
         $this->file_suffix_length = strlen($this->file_suffix);
     }
 
-    /**
+
+   /**
     * Sets the directory to scan.
     *
     * @param    string  directory to scan
     * @access   public
     */
-    function setDirectory($dir) {
+    function setDirectory($dir) 
+    {
         $this->dir = $dir;
     }
 
-    /**
+
+   /**
     * Sets the prefix for every id in the menu hash.
     *
     * @param    string
     * @access   public
     */
-    function setIDPrefix($prefix) {
+    function setIDPrefix($prefix) 
+    {
         $this->id_prefix = $prefix;
     }
 
-    /**
+
+   /**
     * Returns a hash to be used with menu(3)'s setMenu().
     *
     * @param    string  directory to scan
     * @param    string  id prefix
     * @access   public
     */
-    function getMenu($dir = '', $prefix = '') {
-        if ($dir)
+    function getMenu($dir = '', $prefix = '') 
+    {
+        if ($dir) {
             $this->setDirectory($dir);
-        if ($prefix)
+        }
+        if ($prefix) {
             $this->setIDPrefix($prefix);
+        }
 
         // drop the result of previous runs
         $this->files = array();
@@ -167,7 +183,8 @@ class HTML_MenuBrowser {
         return $this->menu;
     }
 
-    /**
+
+   /**
     * Recursive function that does the scan and builds the menu (3) hash.
     *
     * @param    string  directory to scan
@@ -207,26 +224,30 @@ class HTML_MenuBrowser {
         return $struct;
     }
 
-    /**
+
+   /**
     * Adds further informations to the menu hash gathered from the files in it
     *
     * @var      array   Menu hash to examine
     * @return   array   Modified menu hash with the new informations
     */
-    function addFileInfo($menu) {
+    function addFileInfo($menu) 
+    {
         // no foreach - it works on a copy - the recursive
         // structure requires already lots of memory
         reset($menu);
         while (list($id, $data) = each($menu)) {
             $menu[$id] = array_merge($data, $this->exploreFile($data['url']));
-            if (isset($data['sub']))
+            if (isset($data['sub'])) {
                 $menu[$id]['sub'] = $this->addFileInfo($data['sub']);
+            }
         }
 
         return $menu;
     }
 
-    /**
+
+   /**
     * Returns additional menu informations decoded in the file that appears in the menu.
     *
     * You should subclass this method to make it work with your own
@@ -234,10 +255,12 @@ class HTML_MenuBrowser {
     *
     * @param    string  filename
     */
-    function exploreFile($file) {
+    function exploreFile($file) 
+    {
         $xml = join('', @file($file));
-        if (!$xml)
+        if (!$xml) {
             return array();
+        }
 
         $doc = xmldoc($xml);
         $xpc = xpath_new_context($doc);
