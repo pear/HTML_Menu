@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- $Id$ -->
+<html>
+<head>
+    <title>HTML_Menu_SigmaTreeRenderer demo</title>
+<style type="text/css">
+.tree {
+   font-family: sans-serif;
+   font-size: 12pt;
+}
+.tree a {
+   text-decoration: none;
+}
+.tree a:active, .tree a:hover {
+   text-decoration: underline;
+}
+.small {
+   font-size: 10pt;
+}
+.smaller {
+   font-size: 8pt;
+}
+.red {
+   color: #804040;
+}
+</style>
+
+</head>
+<body>
+<!-- BEGIN type_loop -->
+<h1>Trying menu type &quot;{type}&quot;</h1>
+<!-- BEGIN mu_tree_loop -->
+    <!-- BEGIN mu_level_open -->
+<ul>
+    <!-- END mu_level_open -->
+        <!-- BEGIN mu_entry_open -->
+    <li>
+        <!-- END mu_entry_open -->
+        <!-- BEGIN mu_active -->
+    <strong>{mu_title}</strong>
+        <!-- END mu_active -->
+        <!-- BEGIN mu_inactive -->
+    <a href="{mu_url}">{mu_title}</a>
+        <!-- END mu_inactive -->
+        <!-- BEGIN mu_activepath -->
+    <a href="{mu_url}"><em>{mu_title}</em></a>
+        <!-- END mu_activepath -->
+        <!-- BEGIN mu_entry_close -->
+    </li>
+        <!-- END mu_entry_close -->
+    <!-- BEGIN mu_level_close -->
+</ul>
+    <!-- END mu_level_close -->
+<!-- END mu_tree_loop -->
+<!-- END type_loop -->
+
+<h1>Customizing the &quot;tree&quot; output</h1>
+<!-- BEGIN tree_tree_loop -->
+    <!-- BEGIN tree_1_level_open -->
+<ol class="tree">
+    <!-- END tree_1_level_open -->
+    <!-- BEGIN tree_level_open -->
+<ul class="tree">
+    <!-- END tree_level_open -->
+        <!-- BEGIN tree_1_entry_open -->
+    <li>
+        <!-- END tree_1_entry_open -->
+        <!-- BEGIN tree_2_entry_open -->
+    <li class="small">
+        <!-- END tree_2_entry_open -->
+        <!-- BEGIN tree_entry_open -->
+    <li class="smaller">
+        <!-- END tree_entry_open -->
+        <!-- BEGIN tree_active -->
+    <strong class="red">{tree_title}</strong>
+        <!-- END tree_active -->
+        <!-- BEGIN tree_inactive -->
+    <a href="{tree_url}">{tree_title}</a>
+        <!-- END tree_inactive -->
+        <!-- BEGIN tree_activepath -->
+    <a href="{tree_url}"><em>{tree_title}</em></a>
+        <!-- END tree_activepath -->
+        <!-- BEGIN tree_entry_close -->
+    </li>
+        <!-- END tree_entry_close -->
+    <!-- BEGIN tree_level_close -->
+</ul>
+    <!-- END tree_level_close -->
+    <!-- BEGIN tree_1_level_close -->
+</ol>
+    <!-- END tree_1_level_close -->
+<!-- END tree_tree_loop -->
+
+</body>
+</html>
