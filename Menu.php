@@ -99,6 +99,13 @@ class HTML_Menu
     var $_renderer = null;
 
    /**
+    * Prefix for menu URLs 
+    * @var string
+    * @see setUrlPrefix()
+    */
+    var $_urlPrefix = '';
+
+   /**
     * Initializes the menu, sets the type and menu structure.
     *
     * @param    array   menu structure
@@ -265,8 +272,9 @@ class HTML_Menu
     * @param int     Level in the tree
     * @return int    Node type (one of HTML_MENU_ENTRY_* constants)
     */
-    function _findNodeType($nodeId, $nodeUrl, $level)
+    function _findNodeType($nodeId, &$nodeUrl, $level)
     {
+        $nodeUrl = $this->_urlPrefix . ((empty($this->_urlPrefix) || '/' != $nodeUrl{0})? $nodeUrl: substr($nodeUrl, 1));
         if ($this->_currentUrl == $nodeUrl) {
             // menu item that fits to this url - 'active' menu item
             return HTML_MENU_ENTRY_ACTIVE;
@@ -300,6 +308,7 @@ class HTML_Menu
                 $this->_renderTree($node['sub'], $level + 1);
             }
         }
+        $this->_renderer->finishLevel($level);
         if (0 == $level) {
             $this->_renderer->finishMenu($level);
         }
@@ -461,9 +470,10 @@ class HTML_Menu
     function _buildUrlMap($menu, $path) 
     {
         foreach ($menu as $nodeId => $node) {
-            $this->_urlMap[$node['url']] = $path;
+            $url = $this->_urlPrefix . ((empty($this->_urlPrefix) || '/' != $node['url']{0})? $node['url']: substr($node['url'], 1));
+            $this->_urlMap[$url] = $path;
 
-            if ($node['url'] == $this->_currentUrl) {
+            if ($url == $this->_currentUrl) {
                 return true;
             }
 
@@ -508,6 +518,45 @@ class HTML_Menu
     function forceCurrentUrl($url)
     {
         $this->_forcedUrl = $url;
+    }
+
+
+   /**
+    * Prints the HTML menu, the method is an alias to show()
+    *
+    * @param  string  Menu type: tree, urhere, rows, prevnext, sitemap
+    * @access public
+    */
+    function display($menuType = '')
+    {
+        print $this->get($menuType);
+    }
+
+
+   /**
+    * Returns the HTML menu, the method is an alias to get()
+    *  
+    * @param  string  Menu type: tree, urhere, rows, prevnext, sitemap
+    * @access public
+    */
+    function toHtml($menuType = '')
+    {
+        return $this->get($menuType);
+    }
+
+
+   /**
+    * Sets the prefix for the URLs in the menu
+    * 
+    * @param  string
+    * @access public
+    */
+    function setUrlPrefix($prefix)
+    {
+        if (('' != $prefix) && ('/' != substr($prefix, -1))) {
+            $prefix .= '/';
+        }
+        $this->_urlPrefix = $prefix;
     }
 }
 ?>

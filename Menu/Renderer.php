@@ -59,6 +59,17 @@ class HTML_Menu_Renderer
 
 
    /**
+    * Finish the tree level (for types 'tree' and 'sitemap')
+    *  
+    * @access public
+    * @param  int    current depth in the tree structure
+    */
+    function finishLevel($level)
+    {
+    }
+
+
+   /**
     * Finish the row in the menu
     *
     * @access public
