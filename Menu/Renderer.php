@@ -22,10 +22,6 @@
 /**
  * An abstract base class for HTML_Menu renderers
  *
- * XXX: Do we really need startMenu()/finishMenu() and startRow()/finishRow() pairs?
- * XXX: Most probably this will work with only finishMenu() and finishRow(), have
- * XXX: to check this with Sigma renderer
- * 
  * @package  HTML_Menu
  * @version  $Revision$
  * @author   Alexey Borzov <avb@php.net>
@@ -52,31 +48,12 @@ class HTML_Menu_Renderer
 
 
    /**
-    * Start a new menu
-    *
-    * @access public
-    */
-    function startMenu()
-    {
-    }
-
-
-   /**
     * Finish the menu
     *
     * @access public
+    * @param  int    current depth in the tree structure
     */
-    function finishMenu()
-    {
-    }
-
-
-   /**
-    * Start a new row in the menu
-    *
-    * @access public
-    */
-    function startRow()
+    function finishMenu($level)
     {
     }
 
@@ -85,8 +62,9 @@ class HTML_Menu_Renderer
     * Finish the row in the menu
     *
     * @access public
+    * @param  int    current depth in the tree structure
     */
-    function finishRow()
+    function finishRow($level)
     {
     }
 
@@ -99,7 +77,7 @@ class HTML_Menu_Renderer
     * @param int     Current depth in the tree structure
     * @param int     Type of the element (one of HTML_MENU_ENTRY_* constants)
     */
-    function renderEntry(&$node, $level, $type)
+    function renderEntry($node, $level, $type)
     {
     }
 }
