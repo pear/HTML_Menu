@@ -38,8 +38,12 @@ class HTML_Menu_Renderer
    /**
     * Sets the type of the menu being rendered.
     *
+    * This method will throw an error if the renderer is not designed
+    * to render a specific menu type.
+    *
     * @access public
     * @param  string menu type
+    * @throws PEAR_Error
     */
     function setMenuType($menuType)
     {

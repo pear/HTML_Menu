@@ -232,6 +232,7 @@ class HTML_Menu
     * @access public
     * @param  object HTML_Menu_Renderer  Renderer to use
     * @param  string    type of the menu
+    * @throws PEAR_Error
     */
     function render(&$renderer, $menuType = '')
     {
@@ -239,7 +240,11 @@ class HTML_Menu
             $this->setMenuType($menuType);
         }
         $this->_renderer =& $renderer;
-        $this->_renderer->setMenuType($this->_menuType);
+        // the renderer will throw an error if it is unable to process this menu type
+        $res = $this->_renderer->setMenuType($this->_menuType);
+        if (is_object($res) && is_a($res, 'PEAR_Error')) {
+            return $res;
+        }
 
         // storing to a class variable saves some recursion overhead
         $this->_path = $this->getPath();
