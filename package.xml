@@ -24,18 +24,11 @@
   </maintainers>
   <license>PHP License</license>
   <release>
-    <version>2.1</version>
+    <version>2.1.1</version>
     <state>stable</state>
-    <date>2004-01-18</date>
+    <date>2004-05-19</date>
     <notes>
-* Implemented #504, (Possibilty to set prefix for URLs, method setUrlPrefix())
-* Added two new renderers: DirectTree and SigmaTree, that allow to render
-  menus of type 'tree' and 'sitemap' where level is shown by tags nesting
-  rather than indentation (Thanks to Uwe Mindrup for the idea and the
-  initial implementation of DirectTree renderer).
-* If entries in the initial menu structure contain keys other than 'sub',
-  'url' and 'title' then renderers will try to assign them to the placeholders
-  with the same names in the template (Thanks to Didier Galland for the idea)
+Fixed #784 (Notice was raised if 'current' URL wasn't found in the menu).
     </notes>
     <filelist>
       <dir name="/" baseinstalldir="HTML">
@@ -69,6 +62,21 @@
     </deps>
   </release>
   <changelog>
+    <release>
+      <version>2.1</version>
+      <state>stable</state>
+      <date>2004-01-18</date>
+      <notes>
+* Implemented #504, (Possibilty to set prefix for URLs, method setUrlPrefix())
+* Added two new renderers: DirectTree and SigmaTree, that allow to render
+  menus of type 'tree' and 'sitemap' where level is shown by tags nesting
+  rather than indentation (Thanks to Uwe Mindrup for the idea and the
+  initial implementation of DirectTree renderer).
+* If entries in the initial menu structure contain keys other than 'sub',
+  'url' and 'title' then renderers will try to assign them to the placeholders
+  with the same names in the template (Thanks to Didier Galland for the idea)
+      </notes>
+    </release>
     <release>
       <version>2.0pl1</version>
       <state>stable</state>
