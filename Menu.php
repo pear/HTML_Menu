@@ -28,6 +28,7 @@ define('HTML_MENU_ENTRY_ACTIVEPATH',    2);
 define('HTML_MENU_ENTRY_PREVIOUS',      3);
 define('HTML_MENU_ENTRY_NEXT',          4);
 define('HTML_MENU_ENTRY_UPPER',         5);
+define('HTML_MENU_ENTRY_BREADCRUMB',    6); // like activepath, but for 'urhere' type
 
 /**
 * Generates a HTML menu from a multidimensional hash.
@@ -36,71 +37,66 @@ define('HTML_MENU_ENTRY_UPPER',         5);
 *
 * @version  $Revision$
 * @author   Ulf Wendel <ulf.wendel@phpdoc.de>
+* @author   Alexey Borzov <avb@php.net>
 * @access   public
 * @package  HTML_Menu
 */
 class HTML_Menu 
 {
    /**
-    * URL Environment Variable
-    *
-    * @var  string
-    */
-    var $url_env_var = 'PHP_SELF';
-
-   /**
     * Menu structure as a multidimensional hash.
-    *
     * @var  array
     * @see  setMenu(), Menu()
     */
-    var $menu = array();
+    var $_menu = array();
 
    /**
     * Mapping from URL to menu path.
-    *
     * @var  array
     * @see  getPath()
     */
-    var $urlmap = array();
+    var $_urlMap = array();
 
    /**
-    * Menu type: tree, rows, you-are-here.
-    *
-    * @var  array
-    * @see  setMenuType()
-    */
-    var $menu_type = 'tree';
-
-   /**
-    * Path to a certain menu item.
-    *
-    * Internal class variable introduced to save some recursion overhead.
-    *
+    * Path to the current menu item.
     * @var  array
     * @see  get(), getPath()
     */
-    var $path = array();
+    var $_path = array();
 
    /**
-    * Generated HTML menu.
-    *
-    * @var  string
-    * @see  get()
+    * Menu type: tree, rows, you-are-here.
+    * @var  array
+    * @see  setMenuType()
     */
-    var $html = '';
+    var $_menuType = 'tree';
+
+   /**
+    * URL Environment Variable
+    * @var  string
+    */
+    var $_urlEnvVar = 'PHP_SELF';
+
+   /**
+    * The URL to use an URL for the current page, instead of the one normally
+    * taken from env. variables
+    * @var string
+    * @see forceCurrentUrl(), getCurrentUrl()
+    */
+    var $_forcedUrl = '';
 
    /**
     * URL of the current page.
-    *
-    * This can be the URL of the current page but it must not be exactly the
-    * return value of getCurrentURL(). If there's no entry for the return value
-    * in the menu hash getPath() tries to find the menu item that fits best
-    * by shortening the URL sign by sign until it finds an entry that fits.
-    *
     * @see  getCurrentURL(), getPath()
     */
-    var $current_url = '';
+    var $_currentUrl = '';
+
+   /**
+    * The renderer being used to output the menu
+    * @var object HTML_Menu_Renderer
+    * @see render()
+    */
+    var $_renderer = null;
 
    /**
     * Initializes the menu, sets the type and menu structure.
@@ -110,13 +106,13 @@ class HTML_Menu
     * @param    string
     * @see      setMenuType(), setMenu()
     */
-    function HTML_Menu($menu = null, $type = 'tree', $url_env_var = 'PHP_SELF') 
+    function HTML_Menu($menu = null, $type = 'tree', $urlEnvVar = 'PHP_SELF') 
     {
         if (is_array($menu)) {
             $this->setMenu($menu);
         }
         $this->setMenuType($type);
-        $this->setURLEnvVar($url_env_var);
+        $this->setURLEnvVar($urlEnvVar);
     }
 
 
@@ -158,20 +154,27 @@ class HTML_Menu
     */
     function setMenu($menu) 
     {
-        $this->menu   = $menu;
-        $this->urlmap = array();
+        $this->_menu   = $menu;
+        $this->_urlMap = array();
     }
 
 
    /**
-    * Sets the type / format of the menu: tree, rows or urhere.
+    * Sets the type of the menu.
+    * 
+    * Available types are: 'tree', 'rows', 'urhere', 'prevnext', 'sitemap'.
     *
-    * @param    string  'tree', 'rows', 'urhere', 'prevnext', 'sitemap'
+    * @param    string type name
     * @access   public
     */
-    function setMenuType($menu_type) 
+    function setMenuType($menuType) 
     {
-        $this->menu_type = strtolower($menu_type);
+        $menuType = strtolower($menuType);
+        if (in_array($menuType, array('tree', 'rows', 'urhere', 'prevnext', 'sitemap'))) {
+            $this->_menuType = $menuType;
+        } else {
+            $this->_menuType = 'tree';
+        }
     }
 
 
@@ -181,9 +184,9 @@ class HTML_Menu
     * @param    string  environment variable for current URL
     * @access   public
     */
-    function setURLEnvVar($url_env_var) 
+    function setURLEnvVar($urlEnvVar) 
     {
-        $this->url_env_var = $url_env_var;
+        $this->_urlEnvVar = $urlEnvVar;
     }
 
 
@@ -194,29 +197,12 @@ class HTML_Menu
     * @return   string  HTML of the menu
     * @access   public
     */
-    function get($menu_type = '') 
+    function get($menuType = '') 
     {
-        if ('' != $menu_type) {
-            $this->setMenuType($menu_type);
-        }
-
-        $this->html = '';
-
-        // buildMenu for rows cares on this itself
-        if ('rows' != $this->menu_type) {
-            $this->html  .= $this->getStart();
-        }
-
-        // storing to a class variable saves some recursion overhead
-        $this->path = $this->getPath();
-
-        $this->buildMenu($this->menu);
-
-        if ('rows' != $this->menu_type) {
-            $this->html .= $this->getEnd();
-        }
-
-        return $this->html;
+        include_once 'HTML/Menu/DirectRenderer.php';
+        $renderer =& new HTML_Menu_DirectRenderer();
+        $this->render($renderer, $menuType);
+        return $renderer->toHtml();
     }
 
 
@@ -227,237 +213,233 @@ class HTML_Menu
     * @param    string  Menu type: tree, urhere, rows, prevnext, sitemap
     * @see      get()
     */
-    function show($menu_type = '') 
+    function show($menuType = '') 
     {
-        print $this->get($menu_type);
+        print $this->get($menuType);
     }
 
 
    /**
-    * Returns the prefix of the HTML menu items.
+    * Renders the menu.
     *
-    * @return   string  HTML menu prefix
-    * @see      getEnd(), get()
+    * @access public
+    * @param  object HTML_Menu_Renderer  Renderer to use
+    * @param  string    type of the menu
     */
-    function getStart() 
+    function render(&$renderer, $menuType = '')
     {
-        switch ($this->menu_type) {
-            case 'rows':
-            case 'urhere':
-            case 'prevnext':
-                return '<table border="1"><tr>';
+        if ('' != $menuType) {
+            $this->setMenuType($menuType);
+        }
+        $this->_renderer =& $renderer;
+        $this->_renderer->setMenuType($this->_menuType);
 
-            case 'tree':
-            case 'sitemap':
-                return '<table border="1">';
+        // storing to a class variable saves some recursion overhead
+        $this->_path = $this->getPath();
+
+        switch ($this->_menuType) {
+            case 'rows': 
+                $this->_renderRows($this->_menu);
+        		break;
+
+            case 'prevnext': 
+                $this->_renderPrevNext($this->_menu);
+                break;
+
+            case 'urhere':
+                $this->_renderURHere($this->_menu);
+                break;
+
+            default:
+                $this->_renderTree($this->_menu);
+        } // switch
+    }
+
+
+   /**
+    * Finds the type for the node.
+    * 
+    * @access private
+    * @param mixed   Node id
+    * @param string  Node 'url' attribute
+    * @param int     Level in the tree
+    * @return int    Node type (one of HTML_MENU_ENTRY_* constants)
+    */
+    function _findNodeType($nodeId, $nodeUrl, $level)
+    {
+        if ($this->_currentUrl == $nodeUrl) {
+            // menu item that fits to this url - 'active' menu item
+            return HTML_MENU_ENTRY_ACTIVE;
+        } elseif (isset($this->_path[$level]) && $this->_path[$level] == $nodeId) {
+            // processed menu item is part of the path to the active menu item
+            return 'urhere' == $this->_menuType? HTML_MENU_ENTRY_BREADCRUMB: HTML_MENU_ENTRY_ACTIVEPATH;
+        } else {
+            // not selected, not a part of the path to the active menu item
+            return HTML_MENU_ENTRY_INACTIVE;
         }
     }
 
 
    /**
-    * Returns the postfix of the HTML menu items.
-    *
-    * @return   string  HTML menu postfix
-    * @see      getStart(), get()
+    * Renders the tree menu ('tree' and 'sitemap')
+    * 
+    * @access private
+    * @param  array     (sub)menu being rendered
+    * @param  int       current depth in the tree structure
     */
-    function getEnd() 
+    function _renderTree($menu, $level = 0)
     {
-        switch ($this->menu_type) {
-            case 'rows':
-            case 'urhere':
-            case 'prevnext':
-                return '</tr></table>';
+        if (0 == $level) {
+            $this->_renderer->startMenu();
+        }
+        // loop through the (sub)menu
+        foreach ($menu as $node_id => $node) {
+            $type = $this->_findNodeType($node_id, $node['url'], $level);
 
-            case 'tree':
-            case 'sitemap':
-                return '</table>';
+            $this->_renderer->startRow();
+            $this->_renderer->renderEntry($node, $level, $type);
+            $this->_renderer->finishRow();
+
+            // follow the subtree if the active menu item is in it
+            if (('sitemap' == $this->_menuType || HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
+                $this->_renderTree($node['sub'], $level + 1);
+            }
+        }
+        if (0 == $level) {
+            $this->_renderer->finishMenu();
         }
     }
 
 
    /**
-    * Build the menu recursively.
-    *
-    * @param    array   first call: $this->menu, recursion: submenu
-    * @param    integer level of recursion, current depth in the tree structure
-    * @param    integer prevnext flag
+    * Renders the 'urhere' menu
+    * 
+    * @access private
+    * @param  array     (sub)menu being rendered
+    * @param  int       current depth in the tree structure
     */
-    function buildMenu($menu, $level = 0, $flag_stop_level = -1) 
+    function _renderURHere($menu, $level = 0)
+    {
+        if (0 == $level) {
+            $this->_renderer->startMenu();
+            $this->_renderer->startRow();
+        }
+        foreach ($menu as $node_id => $node) {
+            $type = $this->_findNodeType($node_id, $node['url'], $level);
+
+            if (HTML_MENU_ENTRY_INACTIVE != $type) {
+                $this->_renderer->renderEntry($node, $level, $type);
+            }
+
+            // follow the subtree if the active menu item is in it
+            if (HTML_MENU_ENTRY_INACTIVE != $type && isset($node['sub'])) {
+                $this->_renderURHere($node['sub'], $level + 1);
+            }
+        }
+        if (0 == $level) {
+            $this->_renderer->finishRow();
+            $this->_renderer->finishMenu();
+        }
+    }
+
+
+   /**
+    * Renders the 'rows' menu
+    * 
+    * @access private
+    * @param  array     (sub)menu being rendered
+    * @param  int       current depth in the tree structure
+    */
+    function _renderRows($menu, $level = 0)
+    {
+        // every (sub)menu has it's own table
+        $this->_renderer->startMenu();
+        $this->_renderer->startRow();
+
+        $submenu = false;
+
+        foreach ($menu as $node_id => $node) {
+            $type = $this->_findNodeType($node_id, $node['url'], $level);
+
+            $this->_renderer->renderEntry($node, $level, $type);
+
+            // follow the subtree if the active menu item is in it
+            if (HTML_MENU_ENTRY_INACTIVE != $type && isset($node['sub'])) {
+                $submenu = $node['sub'];
+            }
+        }
+
+        $this->_renderer->finishRow();
+        $this->_renderer->finishMenu();
+
+        // go deeper if neccessary
+        if ($submenu) {
+            $this->_renderRows($submenu, $level + 1);
+        }
+    }
+
+
+   /**
+    * Renders the 'prevnext' menu
+    * 
+    * @access private
+    * @param  array     (sub)menu being rendered
+    * @param  int       current depth in the tree structure
+    * @param  int       flag indicating whether to finish processing
+    */
+    function _renderPrevNext($menu, $level = 0, $flagStopLevel = -1)
     {
         static $last_node = array(), $up_node = array();
 
-        // the recursion goes slightly different for every menu type
-        switch ($this->menu_type) {
-            case 'rows':
-                // every (sub)menu has it's own table
-                $this->html .= $this->getStart();
-
-                $submenu = false;
-
-            case 'tree':
-            case 'sitemap':
-            case 'urhere':
-                // loop through the (sub)menu
-                foreach ($menu as $node_id => $node) {
-                    if ($this->current_url == $node['url']) {
-                        // menu item that fits to this url - 'active' menu item
-                        $type = HTML_MENU_ENTRY_ACTIVE;
-                    } elseif (isset($this->path[$level]) && $this->path[$level] == $node_id) {
-                        // processed menu item is part of the path to the active menu item
-                        $type = HTML_MENU_ENTRY_ACTIVEPATH;
-                    } else {
-                        // not selected, not a part of the path to the active menu item
-                        $type = HTML_MENU_ENTRY_INACTIVE;
-                    }
-
-                    if ('urhere' != $this->menu_type || HTML_MENU_ENTRY_INACTIVE != $type) {
-                        $this->html .= $this->getEntry($node, $level, $type);
-                    }
-
-                    // follow the subtree if the active menu item is in it
-                    if (('sitemap' == $this->menu_type || HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
-                        if ('rows' == $this->menu_type) {
-                            $submenu = $node['sub'];
-                        } else {
-                            $this->buildMenu($node['sub'], $level + 1);
-                        }
-                    }
-                }
-                if ('rows' == $this->menu_type) {
-                    // close the table for this level
-                    $this->html .= $this->getEnd();
-    
-                    // go deeper if neccessary
-                    if ($submenu) {
-                        $this->buildMenu($submenu, $level + 1);
-                    }
+        if (0 == $level) {
+            $this->_renderer->startMenu();
+            $this->_renderer->startRow();
+        }
+        foreach ($menu as $node_id => $node) {
+            if (-1 != $flagStopLevel) {
+                // add this item to the menu and stop recursion - (next >>) node
+                if ($flagStopLevel == $level) {
+                    $this->_renderer->renderEntry($node, $level, HTML_MENU_ENTRY_NEXT);
+                    $flagStopLevel = -1;
                 }
                 break;
 
+            } else {
+                $type = $this->_findNodeType($node_id, $node['url'], $level);
+                if (HTML_MENU_ENTRY_ACTIVE == $type) {
+                    $flagStopLevel = $level;
 
-          case 'prevnext':
-                // loop through the (sub)menu
-                foreach ($menu as $node_id => $node) {
-                    if (-1 != $flag_stop_level) {
-                        // add this item to the menu and stop recursion - (next >>) node
-                        if ($flag_stop_level == $level) {
-                            $this->html .= $this->getEntry($node, $level, HTML_MENU_ENTRY_NEXT);
-                            $flag_stop_level = -1;
-                        }
-                        break;
-
-                    } elseif ($this->current_url == $node['url']) {
-                        // menu item that fits to this url - 'active' menu item
-                        $type = 1;
-                        $flag_stop_level = $level;
-
-                        if (0 != count($last_node)) {
-                            $this->html .= $this->getEntry($last_node, $level, HTML_MENU_ENTRY_PREVIOUS);
-                        } else {
-                            // WARNING: if there's no previous take the first menu entry - you might not like this rule!
-                            reset($this->menu);
-                            list($node_id, $first_node) = each($this->menu);
-                            $this->html .= $this->getEntry($first_node, $level, HTML_MENU_ENTRY_PREVIOUS);
-                        }
-
-                        if (0 != count($up_node)) {
-                          $this->html .= $this->getEntry($up_node, $level, HTML_MENU_ENTRY_UPPER);
-                        } else {
-                            // WARNING: if there's no up take the first menu entry - you might not like this rule!
-                            reset($this->menu);
-                            list($node_id, $first_node) = each($this->menu);
-                            $this->html .= $this->getEntry($first_node, $level, HTML_MENU_ENTRY_UPPER);
-                        }
-                    } else if (isset($this->path[$level]) && $this->path[$level] == $node_id) {
-                        // processed menu item is part of the path to the active menu item
-                        $type = HTML_MENU_ENTRY_ACTIVEPATH;
-                    } else {
-                        $type = HTML_MENU_ENTRY_INACTIVE;
+                    // WARNING: if there's no previous take the first menu entry - you might not like this rule!
+                    if (0 == count($last_node)) {
+                        reset($this->_menu);
+                        list($node_id, $last_node) = each($this->_menu);
                     }
+                    $this->_renderer->renderEntry($last_node, $level, HTML_MENU_ENTRY_PREVIOUS);
 
-                    // remember the last (<< prev) node
-                    $last_node = $node;
-
-                    // follow the subtree if the active menu item is in it
-                    if ((HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
-                        $up_node = $node;
-                        $flag_stop_level = $this->buildMenu($node['sub'], $level + 1, (-1 != $flag_stop_level) ? $flag_stop_level + 1 : -1);
+                    // WARNING: if there's no up take the first menu entry - you might not like this rule!
+                    if (0 == count($up_node)) {
+                        reset($this->_menu);
+                        list($node_id, $up_node) = each($this->_menu);
                     }
+                    $this->_renderer->renderEntry($up_node, $level, HTML_MENU_ENTRY_UPPER);
                 }
-                break;
+            }
+
+            // remember the last (<< prev) node
+            $last_node = $node;
+
+            // follow the subtree if the active menu item is in it
+            if ((HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
+                $up_node = $node;
+                $flagStopLevel = $this->_renderPrevNext($node['sub'], $level + 1, (-1 != $flagStopLevel) ? $flagStopLevel + 1 : -1);
+            }
         }
 
-        return ($flag_stop_level) ? $flag_stop_level - 1 : -1;
-    }
-
-
-   /**
-    * Returns the HTML of one menu item.
-    *
-    * @param    array   menu item data (node data)
-    * @param    integer level in the menu tree
-    * @param    integer menu item type: 0, 1, 2. 0 => plain menu item,
-    *                   1 => selected (active) menu item, 2 => item
-    *                   is a member of the path to the selected (active) menu item
-    *                   3 => previous entry, 4 => next entry
-    * @return   string  HTML
-    * @see      buildMenu()
-    */
-    function getEntry(&$node, $level, $item_type)
-    {
-        $html   = '';
-        $indent = '';
-
-        if ('tree' == $this->menu_type || 'sitemap' == $this->menu_type) {
-            // tree menu
-            $html   .= '<tr>';
-            $indent  = str_repeat('&nbsp;&nbsp;&nbsp;', $level);
+        if (0 == $level) {
+            $this->_renderer->finishRow();
+            $this->_renderer->finishMenu();
         }
-
-        // draw the <td></td> cell depending on the type of the menu item
-        switch ($item_type) {
-            case HTML_MENU_ENTRY_INACTIVE:
-                // plain menu item 
-                $html .= '<td>' . $indent . '<a href="' . $node['url'] . '">' .
-                         $node['title'] . '</a></td>';
-                break;
-
-            case HTML_MENU_ENTRY_ACTIVE:
-                // selected (active) menu item
-                $html .= '<td>' . $indent . '<b>' . $node['title'] . '</b></td>';
-                break;
-
-            case HTML_MENU_ENTRY_ACTIVEPATH:
-                // part of the path to the selected (active) menu item
-                $html .= '<td>' . $indent . '<b><a href="' . $node['url'] . '">' . 
-                         $node['title'] . '</a></b>' . 
-                         (('urhere' == $this->menu_type) ? ' &gt;&gt; ' : '') . '</td>'; 
-                break;
-
-            case HTML_MENU_ENTRY_PREVIOUS:
-                // << previous url
-                $html .= '<td>' . $indent . '<a href="' . $node['url'] . '">&lt;&lt; ' . 
-                         $node['title'] . '</a></td>';
-                break;
-
-            case HTML_MENU_ENTRY_NEXT:
-                // next url >>
-                $html .= '<td>' . $indent . '<a href="' . $node['url'] . '">' . 
-                          $node['title'] . ' &gt;&gt;</a></td>';
-                break;
-
-            case HTML_MENU_ENTRY_UPPER:
-                // up url ^^
-                $html .= '<td>' . $indent . '<a href="' . $node['url'] . '">^ ' . 
-                         $node['title'] . ' ^</a></td>';
-                break;
-        }
-
-        if ('tree' == $this->menu_type || 'sitemap' == $this->menu_type) {
-            $html .= '</tr>';
-        }
-
-        return $html;
+        return ($flagStopLevel) ? $flagStopLevel - 1 : -1;
     }
 
 
@@ -465,61 +447,51 @@ class HTML_Menu
     * Returns the path of the current page in the menu 'tree'.
     *
     * @return   array    path to the selected menu item
-    * @see      buildPath(), $urlmap
+    * @see      _buildPath(), $urlmap
     */
     function getPath() 
     {
-        $this->current_url = $this->getCurrentURL();
-        $this->buildPath($this->menu, array());
+        $this->_currentUrl = $this->getCurrentURL();
+        $this->_buildPath($this->_menu, array());
 
-        while ($this->current_url && !isset($this->urlmap[$this->current_url])) {
-            $this->current_url = substr($this->current_url, 0, -1);
+        // If there is no match for the current URL, try to come up with
+        // the best approximation by shortening the url
+        while ($this->_currentUrl && !isset($this->_urlMap[$this->_currentUrl])) {
+            $this->_currentUrl = substr($this->_currentUrl, 0, -1);
         }
 
-        return $this->urlmap[$this->current_url];
+        return $this->_urlMap[$this->_currentUrl];
     }
 
 
    /**
     * Computes the path of the current page in the menu 'tree'.
     *
-    * @param    array       first call: menu hash / recursion: submenu hash
-    * @param    array       first call: array() / recursion: path
-    * @return   boolean     true if the path to the current page was found,
-    *                       otherwise false. Only meaningful for the recursion.
+    * @access   private
+    * @param    array       (sub)menu being processed
+    * @param    array       path to the (sub)menu
+    * @return   boolean     true if the path to the current page was found, otherwise false.
     * @see      getPath(), $urlmap
     */
-    function buildPath($menu, $path) 
+    function _buildPath($menu, $path) 
     {
-        // loop through the (sub)menu
-        foreach ($menu as $node_id => $node) {
-            // save the path of the current node in the urlmap
-            $this->urlmap[$node['url']] = $path;
+        foreach ($menu as $nodeId => $node) {
+            $this->_urlMap[$node['url']] = $path;
 
-            // we got'em - stop the search by returning true
-            // KLUDGE: getPath() works with the best alternative for a URL if there's
-            // no entry for a URL in the menu hash, buildPath() does not perform this test
-            // and might do some unneccessary recursive runs.
-            if ($node['url'] == $this->current_url) {
+            if ($node['url'] == $this->_currentUrl) {
                 return true;
             }
 
-            // current node has a submenu
             if (isset($node['sub'])) {
-
                 // submenu path = current path + current node
                 $subpath   = $path;
-                $subpath[] = $node_id;
+                $subpath[] = $nodeId;
 
-                // continue search recursivly - return is the inner loop finds the
-                // node that belongs to the current url
-                if ($this->buildPath($node['sub'], $subpath)) {
+                if ($this->_buildPath($node['sub'], $subpath)) {
                     return true;
                 }
             }
         }
-
-        // not found
         return false;
     }
 
@@ -530,17 +502,32 @@ class HTML_Menu
     * The returned string is used for all test against the URL's
     * in the menu structure hash.
     *
+    * @access public
     * @return string
     */
     function getCurrentURL() 
     {
-        if (isset($_SERVER[$this->url_env_var])) {
-            return $_SERVER[$this->url_env_var];
-        } elseif (isset($GLOBALS[$this->url_env_var])) {
-            return $GLOBALS[$this->url_env_var];
+        if (!empty($this->_forcedUrl)) {
+            return $this->_forcedUrl;
+        } elseif (isset($_SERVER[$this->_urlEnvVar])) {
+            return $_SERVER[$this->_urlEnvVar];
+        } elseif (isset($GLOBALS[$this->_urlEnvVar])) {
+            return $GLOBALS[$this->_urlEnvVar];
         } else {
             return '';
         }
+    }
+
+
+   /**
+    * Forces the given URL to be "current"
+    *
+    * @access public
+    * @param  string    Url to use
+    */
+    function forceCurrentUrl($url)
+    {
+        $this->_forcedUrl = $url;
     }
 }
 ?>
