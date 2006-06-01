@@ -104,7 +104,7 @@ class HTML_Menu_DirectRenderer extends HTML_Menu_Renderer
             $values = array('');
         }
         foreach ($node as $k => $v) {
-            if ('sub' != $k) {
+            if ('sub' != $k && is_scalar($v)) {
                 $keys[]   = '{' . $k . '}';
                 $values[] = $v;
             }
