@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0">
+<package xmlns="http://pear.php.net/dtd/package-1.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://pear.php.net/dtd/package-1.0 http://pear.php.net/dtd/package-1.0.xsd"
+		 version="1.0">
   <name>HTML_Menu</name>
   <summary>Generates HTML menus from multidimensional hashes.</summary>
   <description>
@@ -8,6 +10,7 @@
     navigation structure for websites, configuring it via a multidimensional 
     hash structure. Different modes for the HTML output are supported.
   </description>
+  <license>PHP License</license>
   <maintainers>
     <maintainer>
       <user>uw</user>
@@ -22,14 +25,23 @@
       <role>lead</role>
     </maintainer>
   </maintainers>
-  <license>PHP License</license>
   <release>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
+    <date>2006-06-02</date>
+    <license>PHP License</license>
     <state>stable</state>
-    <date>2004-05-19</date>
     <notes>
-Fixed #784 (Notice was raised if 'current' URL wasn't found in the menu).
+Fixed bug #5635: do not try to use non-scalar fields of menu node in str_replace()
+call in Direct and DirectTree renderers
+
+Implemented request #2935: moved duplicate code into _prefixUrl() method
+Implemented request #3237: added forceCurrentIndex() method
+Implemented request #4391: a tree branch is expanded in 'tree' output if the
+node contains 'forceExpand' field
     </notes>
+    <deps>
+      <dep type="pkg" rel="has" optional="yes">HTML_Template_Sigma</dep>
+    </deps>
     <filelist>
       <dir name="/" baseinstalldir="HTML">
         <file role="php" name="Menu.php"/>
@@ -57,15 +69,22 @@ Fixed #784 (Notice was raised if 'current' URL wasn't found in the menu).
         </dir>
       </dir>
     </filelist>
-    <deps>
-      <dep type="pkg" rel="has" optional="yes">HTML_Template_Sigma</dep>
-    </deps>
   </release>
   <changelog>
     <release>
-      <version>2.1</version>
+      <version>2.1.1</version>
+      <date>2004-05-19</date>
+      <license>PHP License</license>
       <state>stable</state>
+      <notes>
+Fixed #784 (Notice was raised if 'current' URL wasn't found in the menu).
+      </notes>
+    </release>
+    <release>
+      <version>2.1</version>
       <date>2004-01-18</date>
+      <license>PHP License</license>
+      <state>stable</state>
       <notes>
 * Implemented #504, (Possibilty to set prefix for URLs, method setUrlPrefix())
 * Added two new renderers: DirectTree and SigmaTree, that allow to render
@@ -79,16 +98,18 @@ Fixed #784 (Notice was raised if 'current' URL wasn't found in the menu).
     </release>
     <release>
       <version>2.0pl1</version>
-      <state>stable</state>
       <date>2003-09-16</date>
+      <license>PHP License</license>
+      <state>stable</state>
       <notes>
 Fix packaging: HTML_Template_Sigma should be optional dependency (thanks to Stephan Schmidt)
       </notes>
     </release>
     <release>
       <version>2.0</version>
-      <state>stable</state>
       <date>2003-09-16</date>
+      <license>PHP License</license>
+      <state>stable</state>
       <notes>
 HTML_Menu class does not contain output logic itself anymore. Output is now done via
 external Renderer classes. This will cause BC break if you extended HTML_Menu to customize
@@ -104,8 +125,9 @@ Additions and changes:
     </release>
     <release>
       <version>1.0</version>
-      <state>stable</state>
       <date>2003-08-25</date>
+      <license>PHP License</license>
+      <state>stable</state>
       <notes>
         Legacy release: CVS code with some small cleanups applied.
       </notes>
