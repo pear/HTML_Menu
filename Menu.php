@@ -315,8 +315,11 @@ class HTML_Menu
             $this->_renderer->renderEntry($node, $level, $type);
             $this->_renderer->finishRow($level);
 
-            // follow the subtree if the active menu item is in it or if we want the full menu
-            if (('sitemap' == $this->_menuType || HTML_MENU_ENTRY_INACTIVE != $type) && isset($node['sub'])) {
+            // follow the subtree if the active menu item is in it or if we 
+            // want the full menu or if node expansion is forced (request #4391)
+            if (isset($node['sub']) && ('sitemap' == $this->_menuType || 
+                HTML_MENU_ENTRY_INACTIVE != $type || !empty($node['forceExpand']))) {
+
                 $this->_renderTree($node['sub'], $level + 1);
             }
         }
