@@ -26,18 +26,13 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>2.1.2</version>
-    <date>2006-06-02</date>
+    <version>2.1.3</version>
+    <date>2006-10-08</date>
     <license>PHP License</license>
     <state>stable</state>
     <notes>
-Fixed bug #5635: do not try to use non-scalar fields of menu node in str_replace()
-call in Direct and DirectTree renderers
-
-Implemented request #2935: moved duplicate code into _prefixUrl() method
-Implemented request #3237: added forceCurrentIndex() method
-Implemented request #4391: a tree branch is expanded in 'tree' output if the
-node contains 'forceExpand' field
+Fixed bug #8161: URL prefix was sometimes not prepended to URLs in menu of
+type 'prevnext'
     </notes>
     <deps>
       <dep type="pkg" rel="has" optional="yes">HTML_Template_Sigma</dep>
@@ -71,6 +66,21 @@ node contains 'forceExpand' field
     </filelist>
   </release>
   <changelog>
+  <release>
+    <version>2.1.2</version>
+    <date>2006-06-02</date>
+    <license>PHP License</license>
+    <state>stable</state>
+    <notes>
+Fixed bug #5635: do not try to use non-scalar fields of menu node in str_replace()
+call in Direct and DirectTree renderers
+
+Implemented request #2935: moved duplicate code into _prefixUrl() method
+Implemented request #3237: added forceCurrentIndex() method
+Implemented request #4391: a tree branch is expanded in 'tree' output if the
+node contains 'forceExpand' field
+    </notes>
+  </release>
     <release>
       <version>2.1.1</version>
       <date>2004-05-19</date>

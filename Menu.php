@@ -407,6 +407,7 @@ class HTML_Menu
             if (0 != $flagStop) {
                 // add this item to the menu and stop recursion - (next >>) node
                 if ($flagStop == 1) {
+                    $node['url'] = $this->_prefixUrl($node['url']);
                     $this->_renderer->renderEntry($node, $level, HTML_MENU_ENTRY_NEXT);
                     $flagStop = 2;
                 }
@@ -421,6 +422,7 @@ class HTML_Menu
                     if (0 == count($last_node)) {
                         reset($this->_menu);
                         list($node_id, $last_node) = each($this->_menu);
+                        $last_node['url'] = $this->_prefixUrl($last_node['url']);
                     }
                     $this->_renderer->renderEntry($last_node, $level, HTML_MENU_ENTRY_PREVIOUS);
 
@@ -428,6 +430,7 @@ class HTML_Menu
                     if (0 == count($up_node)) {
                         reset($this->_menu);
                         list($node_id, $up_node) = each($this->_menu);
+                        $up_node['url'] = $this->_prefixUrl($up_node['url']);
                     }
                     $this->_renderer->renderEntry($up_node, $level, HTML_MENU_ENTRY_UPPER);
                 }
