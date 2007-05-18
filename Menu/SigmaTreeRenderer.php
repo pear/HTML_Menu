@@ -1,40 +1,47 @@
 <?php
-//
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Alexey Borzov <avb@php.net>                                 |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-//
+/**
+ * HTML_Template_Sigma-based renderer for 'tree' and 'sitemap' type menus,
+ * where menu level is represented by tag nesting.
+ * 
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2007 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id$
+ * @link        http://pear.php.net/package/HTML_Menu
+ */
 
+/**
+ * Abstract base class for HTML_Menu renderers
+ */ 
 require_once 'HTML/Menu/Renderer.php';
 
 /**
  * HTML_Template_Sigma-based renderer for 'tree' and 'sitemap' type menus,
  * where menu level is represented by tag nesting.
- * 
- * @version $Revision$
- * @author  Alexey Borzov <avb@php.net>
- * @access  public
- * @package HTML_Menu
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: @package_version@
  */
 class HTML_Menu_SigmaTreeRenderer extends HTML_Menu_Renderer
 {
+   /**#@+
+    * @access private
+    */
    /**
     * Template object used for output
-    * @var object HTML_Template_Sigma
+    * @var HTML_Template_Sigma
     */
     var $_tpl;
 
@@ -59,6 +66,7 @@ class HTML_Menu_SigmaTreeRenderer extends HTML_Menu_Renderer
         HTML_MENU_ENTRY_ACTIVE      => 'active',
         HTML_MENU_ENTRY_ACTIVEPATH  => 'activepath'
     );
+    /**#@-*/
 
    /**
     * Class constructor.
@@ -69,8 +77,8 @@ class HTML_Menu_SigmaTreeRenderer extends HTML_Menu_Renderer
     * into one template.
     *
     * @access public
-    * @param  object HTML_Template_Sigma    template object to use for output
-    * @param  string    prefix for template blocks and placeholders
+    * @param  HTML_Template_Sigma   template object to use for output
+    * @param  string                prefix for template blocks and placeholders
     */
     function HTML_Menu_SigmaTreeRenderer(&$tpl, $prefix = 'mu_')
     {

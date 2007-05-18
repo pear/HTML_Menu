@@ -1,24 +1,27 @@
 <?php
-//
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Author:  Alexey Borzov <avb@php.net>                                 |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-//
+/**
+ * The renderer that creates an array of visible menu entries.
+ * 
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2007 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id$
+ * @link        http://pear.php.net/package/HTML_Menu
+ */
 
+/**
+ * Abstract base class for HTML_Menu renderers
+ */ 
 require_once 'HTML/Menu/Renderer.php';
 
 /**
@@ -28,18 +31,23 @@ require_once 'HTML/Menu/Renderer.php';
  * a completely custom menu look.
  * All menu types except 'rows' are "rendered" into a one-dimensional array
  * of entries:
+ * <pre>
  * array(
  *    'entry1',
  *    ...
  *    'entryN'
  * )
+ * </pre>
  * while 'rows' produce a two-dimensional array:
+ * <pre>
  * array(
  *    array('entry 1 for row 1', ..., 'entry M_1 for row 1'),
  *    ...
  *    array('entry 1 for row N', ..., 'entry M_N for row 1')
  * )
- * Here entry is 
+ * </pre>
+ * Here entry is
+ * <pre> 
  * array(
  *    'url'    => url element of menu entry
  *    'title'  => title element of menu entry
@@ -48,17 +56,19 @@ require_once 'HTML/Menu/Renderer.php';
  *    // if the nodes in the original menu array contained keys other
  *    // than 'url', 'title' and 'sub', they will be copied here, too
  * )
+ * </pre>
  * 
- * @version  $Revision$
- * @author   Alexey Borzov <avb@php.net>
- * @access   public
- * @package  HTML_Menu
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: @package_version@
  */
 class HTML_Menu_ArrayRenderer extends HTML_Menu_Renderer
 {
    /**
     * Generated array
     * @var array
+    * @access private
     */
     var $_ary = array();
 
@@ -66,6 +76,7 @@ class HTML_Menu_ArrayRenderer extends HTML_Menu_Renderer
     * Array for the current "menu", that is moved into $_ary by finishMenu(), 
     * makes sense mostly for 'rows
     * @var array
+    * @access private
     */
     var $_menuAry = array();
 

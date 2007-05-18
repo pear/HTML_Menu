@@ -1,27 +1,29 @@
 <?php
-//
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Ulf Wendel <ulf.wendel@phpdoc.de>                           |
-// |          Sebastian Bergmann <sb@sebastian-bergmann.de>               |
-// |          Alexey Borzov <avb@php.net>                                 |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-//
+/**
+ * Generates a HTML menu from a multidimensional hash
+ * 
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Ulf Wendel <ulf.wendel@phpdoc.de>
+ * @author      Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2007 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id$
+ * @link        http://pear.php.net/package/HTML_Menu
+ */
 
-// Types of the menu entries, instead of former magic numbers
+/**#@+
+ * Constants for menu entry types
+ */
 define('HTML_MENU_ENTRY_INACTIVE',      0);
 define('HTML_MENU_ENTRY_ACTIVE',        1);
 define('HTML_MENU_ENTRY_ACTIVEPATH',    2);
@@ -29,20 +31,24 @@ define('HTML_MENU_ENTRY_PREVIOUS',      3);
 define('HTML_MENU_ENTRY_NEXT',          4);
 define('HTML_MENU_ENTRY_UPPER',         5);
 define('HTML_MENU_ENTRY_BREADCRUMB',    6); // like activepath, but for 'urhere' type
+/**#@-*/
 
 /**
-* Generates a HTML menu from a multidimensional hash.
-*
-* Special thanks to the original author: Alex Vorobiev  <sasha@mathforum.com>.
-*
-* @version  $Revision$
-* @author   Ulf Wendel <ulf.wendel@phpdoc.de>
-* @author   Alexey Borzov <avb@php.net>
-* @access   public
-* @package  HTML_Menu
-*/
+ * Generates a HTML menu from a multidimensional hash.
+ *
+ * Special thanks to the original author: Alex Vorobiev  <sasha@mathforum.com>.
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Ulf Wendel <ulf.wendel@phpdoc.de>
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: @package_version@
+ */
 class HTML_Menu 
 {
+   /**#@+
+    * @access private
+    */
    /**
     * Menu structure as a multidimensional hash.
     * @var  array
@@ -100,7 +106,7 @@ class HTML_Menu
 
    /**
     * The renderer being used to output the menu
-    * @var object HTML_Menu_Renderer
+    * @var HTML_Menu_Renderer
     * @see render()
     */
     var $_renderer = null;
@@ -111,6 +117,7 @@ class HTML_Menu
     * @see setUrlPrefix()
     */
     var $_urlPrefix = '';
+    /**#@-*/
 
    /**
     * Initializes the menu, sets the type and menu structure.
@@ -137,13 +144,16 @@ class HTML_Menu
     * quite "dirty" but simple and easy to traverse. An example
     * show the structure. To get the following menu:
     *
+    * <pre>
     * 1  - Projects
     * 11 - Projects => PHPDoc
     * 12 - Projects => Forms
     * 2  - Stuff
+    * </pre>
     *
     * you need the array:
     *
+    * <pre>
     * $menu = array(
     *           1 => array(
     *                  'title' => 'Projects',
@@ -158,6 +168,7 @@ class HTML_Menu
     *             ),
     *           2 => array( 'title' => 'Stuff', 'url' => '/stuff/index.php' )
     *        )
+    * </pre>
     *
     * Note the index 'sub' and the nesting. Note also that 1, 11, 12, 2
     * must be unique. The class uses them as ID's.
@@ -237,8 +248,8 @@ class HTML_Menu
     * Renders the menu.
     *
     * @access public
-    * @param  object HTML_Menu_Renderer  Renderer to use
-    * @param  string    type of the menu
+    * @param  HTML_Menu_Renderer    Renderer to use
+    * @param  string                Type of the menu
     * @throws PEAR_Error
     */
     function render(&$renderer, $menuType = '')
@@ -523,6 +534,8 @@ class HTML_Menu
             return $_SERVER[$this->_urlEnvVar];
         } elseif (isset($GLOBALS[$this->_urlEnvVar])) {
             return $GLOBALS[$this->_urlEnvVar];
+        } elseif ($env = getenv($this->_urlEnvVar)) {
+            return $env;
         } else {
             return '';
         }

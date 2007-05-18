@@ -1,11 +1,12 @@
 <?php
 /**
- * Usage example for HTML_Menu with Sigma renderer 
- * 
- * $Id$
- * 
- * @package HTML_Menu
- * @author Alexey Borzov <avb@php.net>
+ * Usage example for HTML_Menu with Sigma renderer
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     CVS: $Id$
+ * @ignore
  */
 
 require_once 'HTML/Menu.php';

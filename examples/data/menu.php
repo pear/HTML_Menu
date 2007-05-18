@@ -1,11 +1,12 @@
 <?php
 /**
  * Menu data for HTML_Menu usage examples
- * 
- * $Id$
- * 
- * @package HTML_Menu
- * @author Alexey Borzov <avb@php.net>
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     CVS: $Id$
+ * @ignore
  */
 
 $data = array(

@@ -1,11 +1,12 @@
 <?php
 /**
  * Basic usage example for HTML_Menu, showing all available menu types
- * 
- * $Id$
- * 
- * @package HTML_Menu
- * @author Alexey Borzov <avb@php.net>
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     CVS: $Id$
+ * @ignore
  */
 
 require_once 'HTML/Menu.php';

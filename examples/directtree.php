@@ -1,11 +1,12 @@
 <?php
 /**
  * Usage example for HTML_Menu, DirectTree renderer
- * 
- * $Id$
- * 
- * @package HTML_Menu
- * @author Alexey Borzov <avb@php.net>
+ *
+ * @category    HTML
+ * @package     HTML_Menu
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     CVS: $Id$
+ * @ignore
  */
 
 require_once 'HTML/Menu.php';
