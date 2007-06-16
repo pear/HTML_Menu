@@ -15,7 +15,7 @@ require_once 'HTML/Template/Sigma.php';
 require_once './data/menu.php';
 
 $menu =& new HTML_Menu($data);
-//$menu->forceCurrentUrl('/item1.2.2.php');
+$menu->forceCurrentUrl('/item1.2.2.php');
 
 $types = array('tree', 'sitemap');
 
@@ -30,7 +30,7 @@ foreach ($types as $type) {
 }
 
 $rendererCustom =& new HTML_Menu_SigmaTreeRenderer($tpl, 'tree_');
-//$menu->forceCurrentUrl('/item1.2.2.2.php');
+$menu->forceCurrentUrl('/item1.2.2.2.php');
 $menu->render($rendererCustom, 'tree');
 
 $tpl->show();
