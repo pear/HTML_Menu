@@ -225,7 +225,7 @@ class HTML_Menu
     function get($menuType = '') 
     {
         include_once 'HTML/Menu/DirectRenderer.php';
-        $renderer =& new HTML_Menu_DirectRenderer();
+        $renderer = new HTML_Menu_DirectRenderer();
         $this->render($renderer, $menuType);
         return $renderer->toHtml();
     }
