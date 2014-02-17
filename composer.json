@@ -29,5 +29,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "*"
+    },
+    "suggest": {
+        "pear/html_template_sigma": "Install optionally via your project's composer.json"
     }
 }
