@@ -1,0 +1,36 @@
+{
+    "authors": [
+        {
+            "email": "ulf.wendel@phpdoc.de",
+            "name": "Ulf Wendel",
+            "role": "Lead"
+        },
+        {
+            "email": "borz_off@cs.msu.su",
+            "name": "Alexey Borzov",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "./"
+        ]
+    },
+    "description": "More info available on: http://pear.php.net/package/HTML_Menu",
+    "license": "PHP License",
+    "name": "pear/html_menu",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_Menu",
+        "source": "https://github.com/pear/HTML_Menu"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "suggest": {
+        "pear/html_template_sigma": "Install optionally via your project's composer.json"
+    }
+}
