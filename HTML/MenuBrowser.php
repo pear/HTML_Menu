@@ -123,7 +123,7 @@ class HTML_MenuBrowser
     * @param    string  Suffix for files containing the additional data
     * @see      $dir
     */
-    function HTML_MenuBrowser($dir = '', $index = '', $file_suffix = '')
+    function __construct($dir = '', $index = '', $file_suffix = '')
     {
         if ($dir) {
             $this->dir = $dir;
@@ -139,6 +139,18 @@ class HTML_MenuBrowser
         $this->file_suffix_length = strlen($this->file_suffix);
     }
 
+   /**
+    * Creates the object and optionally sets the directory to scan.
+    *
+    * @param    string  Directory to scan
+    * @param    string  Filename of index pages
+    * @param    string  Suffix for files containing the additional data
+    * @see      $dir
+    */
+    function HTML_MenuBrowser($dir = '', $index = '', $file_suffix = '')
+    {
+        self::__construct($dir, $index, $file_suffix);
+    }
 
    /**
     * Sets the directory to scan.

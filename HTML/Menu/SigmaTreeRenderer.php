@@ -80,12 +80,22 @@ class HTML_Menu_SigmaTreeRenderer extends HTML_Menu_Renderer
     * @param  HTML_Template_Sigma   template object to use for output
     * @param  string                prefix for template blocks and placeholders
     */
-    function HTML_Menu_SigmaTreeRenderer($tpl, $prefix = 'mu_')
+    function __construct($tpl, $prefix = 'mu_')
     {
         $this->_tpl    = $tpl;
         $this->_prefix =  $prefix;
     }
 
+    /**
+     * PHP4-style constructor for backwards compatibility
+     *
+     * @param  HTML_Template_Sigma   template object to use for output
+     * @param  string                prefix for template blocks and placeholders
+     */
+    function HTML_Menu_SigmaTreeRenderer($tpl, $prefix = 'mu_')
+    {
+        self::__construct($tpl, $prefix);
+    }
 
     function setMenuType($menuType)
     {
