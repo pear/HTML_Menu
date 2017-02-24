@@ -10,11 +10,11 @@
  */
 
 require_once 'HTML/Menu.php';
-require_once './data/menu.php';
+require_once __DIR__ . '/data/menu.php';
 
 $types = array('tree', 'urhere', 'prevnext', 'rows', 'sitemap');
 
-$menu =& new HTML_Menu($data);
+$menu = new HTML_Menu($data);
 $menu->forceCurrentUrl('/item1.2.2.php');
 
 foreach ($types as $type) {

@@ -12,16 +12,16 @@
 require_once 'HTML/Menu.php';
 require_once 'HTML/Menu/SigmaTreeRenderer.php';
 require_once 'HTML/Template/Sigma.php';
-require_once './data/menu.php';
+require_once __DIR__ . '/data/menu.php';
 
-$menu =& new HTML_Menu($data);
+$menu = new HTML_Menu($data);
 $menu->forceCurrentUrl('/item1.2.2.php');
 
 $types = array('tree', 'sitemap');
 
-$tpl =& new HTML_Template_Sigma('./templates');
+$tpl = new HTML_Template_Sigma('./templates');
 $tpl->loadTemplateFile('sigmatree.html', true, true);
-$renderer =& new HTML_Menu_SigmaTreeRenderer($tpl);
+$renderer = new HTML_Menu_SigmaTreeRenderer($tpl);
 
 foreach ($types as $type) {
     $tpl->setVariable('type', $type);
@@ -29,7 +29,7 @@ foreach ($types as $type) {
     $tpl->parse('type_loop');
 }
 
-$rendererCustom =& new HTML_Menu_SigmaTreeRenderer($tpl, 'tree_');
+$rendererCustom = new HTML_Menu_SigmaTreeRenderer($tpl, 'tree_');
 $menu->forceCurrentUrl('/item1.2.2.2.php');
 $menu->render($rendererCustom, 'tree');
 
