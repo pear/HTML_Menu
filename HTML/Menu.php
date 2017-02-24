@@ -225,7 +225,7 @@ class HTML_Menu
     function get($menuType = '') 
     {
         include_once 'HTML/Menu/DirectRenderer.php';
-        $renderer =& new HTML_Menu_DirectRenderer();
+        $renderer = new HTML_Menu_DirectRenderer();
         $this->render($renderer, $menuType);
         return $renderer->toHtml();
     }
@@ -252,12 +252,12 @@ class HTML_Menu
     * @param  string                Type of the menu
     * @throws PEAR_Error
     */
-    function render(&$renderer, $menuType = '')
+    function render($renderer, $menuType = '')
     {
         if ('' != $menuType) {
             $this->setMenuType($menuType);
         }
-        $this->_renderer =& $renderer;
+        $this->_renderer = $renderer;
         // the renderer will throw an error if it is unable to process this menu type
         $res = $this->_renderer->setMenuType($this->_menuType);
         if (is_object($res) && is_a($res, 'PEAR_Error')) {
@@ -295,7 +295,7 @@ class HTML_Menu
     * @param int     Level in the tree
     * @return int    Node type (one of HTML_MENU_ENTRY_* constants)
     */
-    function _findNodeType($nodeId, &$nodeUrl, $level)
+    function _findNodeType($nodeId, $nodeUrl, $level)
     {
         $nodeUrl = $this->_prefixUrl($nodeUrl);
         if ($this->_currentUrl == $nodeUrl) {
@@ -607,7 +607,7 @@ class HTML_Menu
     * @return   string  URL
     * @access   private
     */
-    function _findUrlByIndex(&$menu, $index)
+    function _findUrlByIndex($menu, $index)
     {
         foreach (array_keys($menu) as $key) {
             if ($key == $index) {
