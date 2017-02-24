@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "classmap": [
-            "./"
+            "./HTML"
         ]
     },
     "description": "More info available on: http://pear.php.net/package/HTML_Menu",

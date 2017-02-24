@@ -52,32 +52,34 @@ hash structure. Different modes for the HTML output are supported.
     <file name="sigmatree.php" role="doc" />
     <file name="types.php" role="doc" />
    </dir> <!-- /examples -->
-   <dir name="Menu">
-    <file name="ArrayRenderer.php" role="php">
+   <dir name="HTML">
+    <dir name="Menu">
+     <file name="ArrayRenderer.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="DirectRenderer.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="DirectTreeRenderer.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Renderer.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="SigmaRenderer.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="SigmaTreeRenderer.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /Menu -->
+    <file name="Menu.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file name="DirectRenderer.php" role="php">
+    <file name="MenuBrowser.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file name="DirectTreeRenderer.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Renderer.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="SigmaRenderer.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="SigmaTreeRenderer.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-   </dir> <!-- /Menu -->
-   <file name="Menu.php" role="php">
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-   </file>
-   <file name="MenuBrowser.php" role="php">
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-   </file>
+   </dir> <!-- /HTML -->
   </dir> <!-- / -->
  </contents>
  <dependencies>
