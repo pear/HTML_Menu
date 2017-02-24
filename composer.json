@@ -16,7 +16,8 @@
             "./HTML"
         ]
     },
-    "description": "More info available on: http://pear.php.net/package/HTML_Menu",
+    "description": "Generates HTML menus from multidimensional hashes",
+    "homepage": "http://pear.php.net/package/HTML_Menu",
     "license": "PHP License",
     "name": "pear/html_menu",
     "support": {
@@ -24,12 +25,6 @@
         "source": "https://github.com/pear/HTML_Menu"
     },
     "type": "library",
-    "require": {
-        "pear/pear_exception": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    },
     "suggest": {
         "pear/html_template_sigma": "Install optionally via your project's composer.json"
     }
