@@ -38,7 +38,7 @@ hash structure. Different modes for the HTML output are supported.
 * getCurrentUrl() also tries to use getenv() (bug #10242)
  </notes>
  <contents>
-  <dir name="/" baseinstalldir="HTML">
+  <dir name="/" baseinstalldir="/">
    <dir name="examples">
     <dir name="data">
      <file name="menu.php" role="doc" />
