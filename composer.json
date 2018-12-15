@@ -16,6 +16,9 @@
             "./HTML"
         ]
     },
+    "include-path": [
+        "./"
+    ],
     "description": "Generates HTML menus from multidimensional hashes",
     "homepage": "http://pear.php.net/package/HTML_Menu",
     "license": "PHP License",
