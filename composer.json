@@ -21,7 +21,7 @@
     ],
     "description": "Generates HTML menus from multidimensional hashes",
     "homepage": "http://pear.php.net/package/HTML_Menu",
-    "license": "PHP License",
+    "license": "PHP-3.01",
     "name": "pear/html_menu",
     "support": {
         "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_Menu",
