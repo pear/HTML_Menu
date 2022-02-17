@@ -1,7 +1,7 @@
 <?php
 /**
  * Generates a HTML menu from a multidimensional hash
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
@@ -44,7 +44,7 @@ define('HTML_MENU_ENTRY_BREADCRUMB',    6); // like activepath, but for 'urhere'
  * @author      Alexey Borzov <avb@php.net>
  * @version     Release: @package_version@
  */
-class HTML_Menu 
+class HTML_Menu
 {
    /**#@+
     * @access private
@@ -93,7 +93,7 @@ class HTML_Menu
 
    /**
     * Index of the menu item that should be made "current"
-    * @var mixed 
+    * @var mixed
     * @see forceCurrentIndex()
     */
     var $_forcedIndex = null;
@@ -112,7 +112,7 @@ class HTML_Menu
     var $_renderer = null;
 
    /**
-    * Prefix for menu URLs 
+    * Prefix for menu URLs
     * @var string
     * @see setUrlPrefix()
     */
@@ -189,7 +189,7 @@ class HTML_Menu
     * @param    array
     * @access   public
     */
-    function setMenu($menu) 
+    function setMenu($menu)
     {
         $this->_menu   = $menu;
         $this->_urlMap = array();
@@ -198,13 +198,13 @@ class HTML_Menu
 
    /**
     * Sets the type of the menu.
-    * 
+    *
     * Available types are: 'tree', 'rows', 'urhere', 'prevnext', 'sitemap'.
     *
     * @param    string type name
     * @access   public
     */
-    function setMenuType($menuType) 
+    function setMenuType($menuType)
     {
         $menuType = strtolower($menuType);
         if (in_array($menuType, array('tree', 'rows', 'urhere', 'prevnext', 'sitemap'))) {
@@ -221,7 +221,7 @@ class HTML_Menu
     * @param    string  environment variable for current URL
     * @access   public
     */
-    function setURLEnvVar($urlEnvVar) 
+    function setURLEnvVar($urlEnvVar)
     {
         $this->_urlEnvVar = $urlEnvVar;
     }
@@ -235,7 +235,7 @@ class HTML_Menu
     * @access   public
     * @see render()
     */
-    function get($menuType = '') 
+    function get($menuType = '')
     {
         include_once 'HTML/Menu/DirectRenderer.php';
         $renderer = new HTML_Menu_DirectRenderer();
@@ -251,7 +251,7 @@ class HTML_Menu
     * @param    string  Menu type: tree, urhere, rows, prevnext, sitemap
     * @see      get(), render()
     */
-    function show($menuType = '') 
+    function show($menuType = '')
     {
         print $this->get($menuType);
     }
@@ -281,11 +281,11 @@ class HTML_Menu
         $this->_path = $this->getPath();
 
         switch ($this->_menuType) {
-            case 'rows': 
+            case 'rows':
                 $this->_renderRows($this->_menu);
         		break;
 
-            case 'prevnext': 
+            case 'prevnext':
                 $this->_renderPrevNext($this->_menu);
                 break;
 
@@ -301,7 +301,7 @@ class HTML_Menu
 
    /**
     * Finds the type for the node.
-    * 
+    *
     * @access private
     * @param mixed   Node id
     * @param string  Node 'url' attribute
@@ -326,7 +326,7 @@ class HTML_Menu
 
    /**
     * Renders the tree menu ('tree' and 'sitemap')
-    * 
+    *
     * @access private
     * @param  array     (sub)menu being rendered
     * @param  int       current depth in the tree structure
@@ -339,9 +339,9 @@ class HTML_Menu
             $this->_renderer->renderEntry($node, $level, $type);
             $this->_renderer->finishRow($level);
 
-            // follow the subtree if the active menu item is in it or if we 
+            // follow the subtree if the active menu item is in it or if we
             // want the full menu or if node expansion is forced (request #4391)
-            if (isset($node['sub']) && ('sitemap' == $this->_menuType || 
+            if (isset($node['sub']) && ('sitemap' == $this->_menuType ||
                 HTML_MENU_ENTRY_INACTIVE != $type || !empty($node['forceExpand']))) {
 
                 $this->_renderTree($node['sub'], $level + 1);
@@ -356,7 +356,7 @@ class HTML_Menu
 
    /**
     * Renders the 'urhere' menu
-    * 
+    *
     * @access private
     * @param  array     (sub)menu being rendered
     * @param  int       current depth in the tree structure
@@ -383,7 +383,7 @@ class HTML_Menu
 
    /**
     * Renders the 'rows' menu
-    * 
+    *
     * @access private
     * @param  array     (sub)menu being rendered
     * @param  int       current depth in the tree structure
@@ -416,7 +416,7 @@ class HTML_Menu
 
    /**
     * Renders the 'prevnext' menu
-    * 
+    *
     * @access private
     * @param  array     (sub)menu being rendered
     * @param  int       current depth in the tree structure
@@ -485,7 +485,7 @@ class HTML_Menu
     * @return   array    path to the selected menu item
     * @see      _buildUrlMap(), $_urlMap
     */
-    function getPath() 
+    function getPath()
     {
         $this->_currentUrl = $this->getCurrentURL();
         $this->_buildUrlMap($this->_menu, array());
@@ -509,17 +509,17 @@ class HTML_Menu
     * @return   boolean     true if the path to the current page was found, otherwise false.
     * @see      getPath(), $_urlMap
     */
-    function _buildUrlMap($menu, $path) 
+    function _buildUrlMap($menu, $path)
     {
         foreach ($menu as $nodeId => $node) {
-            $url = $this->_prefixUrl($node['url']); 
+            $url = $this->_prefixUrl($node['url']);
             $this->_urlMap[$url] = $path;
 
             if ($url == $this->_currentUrl) {
                 return true;
             }
 
-            if (isset($node['sub']) && 
+            if (isset($node['sub']) &&
                 $this->_buildUrlMap($node['sub'], array_merge($path, array($nodeId)))) {
                 return true;
             }
@@ -537,7 +537,7 @@ class HTML_Menu
     * @access public
     * @return string
     */
-    function getCurrentURL() 
+    function getCurrentURL()
     {
         if (!empty($this->_forcedUrl)) {
             return $this->_forcedUrl;
@@ -570,7 +570,7 @@ class HTML_Menu
 
    /**
     * Sets the prefix for the URLs in the menu
-    * 
+    *
     * @param  string
     * @access public
     */
@@ -608,7 +608,7 @@ class HTML_Menu
     function forceCurrentIndex($index)
     {
         $this->_forcedIndex = $index;
-        $this->_forcedUrl   = ''; 
+        $this->_forcedUrl   = '';
     }
 
 
