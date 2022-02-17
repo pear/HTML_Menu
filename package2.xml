@@ -6,8 +6,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <name>HTML_Menu</name>
  <channel>pear.php.net</channel>
  <summary>Generates HTML menus from multidimensional hashes.</summary>
- <description>With the HTML_Menu class one can easily create and maintain a 
-navigation structure for websites, configuring it via a multidimensional 
+ <description>With the HTML_Menu class one can easily create and maintain a
+navigation structure for websites, configuring it via a multidimensional
 hash structure. Different modes for the HTML output are supported.
  </description>
  <lead>
@@ -22,9 +22,9 @@ hash structure. Different modes for the HTML output are supported.
   <email>borz_off@cs.msu.su</email>
   <active>yes</active>
  </lead>
- <date>2017-02-24</date>
+ <date>2022-02-17</date>
  <version>
-  <release>2.2.0</release>
+  <release>2.2.2</release>
   <api>2.2.0</api>
  </version>
  <stability>
@@ -34,9 +34,7 @@ hash structure. Different modes for the HTML output are supported.
  <license uri="http://www.php.net/license">PHP License</license>
 
  <notes>
-QA release
-* Drop PHP4 support
-* Compatibility with PHP 7.1
+* Compatibility with PHP 8
  </notes>
 
  <contents>
@@ -105,6 +103,38 @@ QA release
  <phprelease />
 
  <changelog>
+
+  <release>
+   <version>
+    <release>2.2.2</release>
+    <api>2.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2022-02-17</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+* Compatibility with PHP 8
+   </notes>
+  </release>
+
+  <release>
+   <version>
+    <release>2.2.1</release>
+    <api>2.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2018-12-15</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+Fix composer installation configuration
+   </notes>
+  </release>
 
   <release>
    <version>
