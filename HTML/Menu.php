@@ -593,7 +593,7 @@ class HTML_Menu
     */
     function _prefixUrl($url)
     {
-        return $this->_urlPrefix . ((empty($this->_urlPrefix) || '/' != $url{0})? $url: substr($url, 1));
+        return $this->_urlPrefix . ((empty($this->_urlPrefix) || '/' != $url[0])? $url: substr($url, 1));
     }
 
 
